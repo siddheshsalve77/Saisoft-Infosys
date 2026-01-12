@@ -1,0 +1,2162 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sai Soft Infosys - Intern Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script><!-- Firebase SDKs - Using compat version for easier integration -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Poppins:wght@600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    body.dark-mode {
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+    
+    .dark-mode .bg-white {
+      background: #1e293b !important;
+    }
+    
+    .dark-mode .bg-slate-50 {
+      background: #0f172a !important;
+    }
+    
+    .dark-mode .bg-slate-100 {
+      background: #334155 !important;
+    }
+    
+    .dark-mode .text-slate-800 {
+      color: #e2e8f0 !important;
+    }
+    
+    .dark-mode .text-slate-600 {
+      color: #cbd5e1 !important;
+    }
+    
+    .dark-mode .text-slate-500 {
+      color: #94a3b8 !important;
+    }
+    
+    .dark-mode .text-slate-400 {
+      color: #64748b !important;
+    }
+    
+    .dark-mode .border-slate-200 {
+      border-color: #334155 !important;
+    }
+    
+    .dark-mode .border-slate-100 {
+      border-color: #1e293b !important;
+    }
+    
+    .dark-mode .hover\:bg-slate-50:hover {
+      background: #1e293b !important;
+    }
+    
+    .dark-mode .gradient-bg {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #1e293b 100%) !important;
+    }
+    
+    .dark-mode .glass-effect {
+      background: rgba(30, 41, 59, 0.95) !important;
+    }
+    
+    @keyframes confetti-fall {
+      0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+    
+    @keyframes celebration-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes sparkle {
+      0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+      50% { transform: scale(1) rotate(180deg); opacity: 1; }
+    }
+    
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      z-index: 9999;
+      animation: confetti-fall 4s ease-in forwards;
+      pointer-events: none;
+    }
+    
+    .celebration-banner {
+      animation: celebration-pulse 2s ease-in-out infinite;
+    }
+    
+    .shimmer-text {
+      background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b);
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s linear infinite;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .sparkle {
+      animation: sparkle 1.5s ease-in-out infinite;
+    }
+    
+    .sidebar-item {
+      transition: all 0.2s ease;
+    }
+    
+    .sidebar-item:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+    
+    .sidebar-item.active {
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), transparent);
+      border-left: 3px solid #3b82f6;
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .modal-backdrop {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1e40af 100%);
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      ring: 2px;
+      ring-color: #3b82f6;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    
+    .dark-mode .scrollbar-thin::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+    
+    .dark-mode .scrollbar-thin::-webkit-scrollbar-thumb {
+      background: #475569;
+    }
+    
+    .dark-mode-toggle {
+      position: relative;
+      width: 60px;
+      height: 30px;
+      background: #cbd5e1;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .dark-mode-toggle.active {
+      background: #3b82f6;
+    }
+    
+    .dark-mode-toggle-circle {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+    
+    .dark-mode-toggle.active .dark-mode-toggle-circle {
+      transform: translateX(30px);
+    }
+    
+    .star-crown {
+      filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.8));
+    }
+    
+    .attendance-day {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      background: #e2e8f0;
+    }
+    
+    .attendance-day.active {
+      background: #10b981;
+    }
+    
+    .attendance-day.partial {
+      background: #f59e0b;
+    }
+    
+    .delete-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .loading-spinner {
+      border: 3px solid #f3f4f6;
+      border-top: 3px solid #3b82f6;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* MOBILE RESPONSIVE STYLES */
+    .sidebar {
+      position: fixed;
+      left: -100%;
+      top: 0;
+      bottom: 0;
+      width: 280px;
+      z-index: 100;
+      transition: left 0.3s ease;
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .mobile-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 99;
+    }
+
+    .mobile-overlay.active {
+      display: block;
+    }
+
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: currentColor;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    @media (min-width: 769px) {
+      .sidebar {
+        position: relative;
+        left: 0;
+        width: 256px;
+      }
+
+      .mobile-only {
+        display: none !important;
+      }
+
+      .mobile-overlay {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .desktop-only {
+        display: none !important;
+      }
+
+      .card-hover:hover {
+        transform: none;
+      }
+
+      h1 {
+        font-size: 1.5rem !important;
+      }
+
+      h2 {
+        font-size: 1.25rem !important;
+      }
+
+      h3 {
+        font-size: 1rem !important;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-slate-50">
+  <div id="app" class="h-full w-full flex items-center justify-center">
+   <div class="loading-spinner"></div>
+  </div>
+  <script>
+    // 🔥 FIREBASE CONFIGURATION - Your Sai Soft Infosys Project
+    const firebaseConfig = {
+      apiKey: "AIzaSyCkO6JDCmU66zAJwO1kJ2yVOPdYAzvSm5o",
+      authDomain: "sai-soft-infosys-fc440.firebaseapp.com",
+      projectId: "sai-soft-infosys-fc440",
+      storageBucket: "sai-soft-infosys-fc440.firebasestorage.app",
+      messagingSenderId: "242076702238",
+      appId: "1:242076702238:web:b753e58989872e8249000f"
+    };
+
+    // Initialize Firebase
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+    const collectionName = 'saisoftInterns';
+
+    // Default configuration
+    const defaultConfig = {
+      company_name: 'Sai Soft Infosys',
+      tagline: 'Empowering Future Tech Leaders',
+      primary_color: '#1e40af',
+      secondary_color: '#3b82f6',
+      background_color: '#f8fafc',
+      text_color: '#1e293b',
+      accent_color: '#f59e0b'
+    };
+
+    // Application State
+    let config = { ...defaultConfig };
+    let appData = {
+      interns: [],
+      tasks: [],
+      submissions: [],
+      tickets: [],
+      attendance: [],
+      projects: [],
+      teams: [],
+      meetings: [],
+      settings: []
+    };
+    let currentUser = null;
+    let currentPage = 'dashboard';
+    let darkMode = localStorage.getItem('darkMode') === 'true';
+    let modals = {};
+    let selectedInternId = null;
+    let selectedDates = [];
+    let confirmDelete = null;
+    let unsubscribeFirestore = null;
+    let sidebarOpen = false;
+
+    // Admin credentials
+    const ADMIN_EMAIL = 'admin@saisoft';
+    const ADMIN_PASSWORD = 'Saisoft@2026';
+
+    // Icons
+    const icons = {
+      home: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+      users: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+      clipboard: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>`,
+      briefcase: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
+      usersGroup: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+      calendar: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`,
+      ticket: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>`,
+      checkCircle: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+      logout: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>`,
+      plus: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>`,
+      x: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
+      mail: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`,
+      user: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+      sun: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`,
+      moon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`,
+      trash: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`,
+      star: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+      menu: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`
+    };
+
+    // Generate unique ID
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    // Get avatar
+    function getAvatar(name, photoUrl) {
+      if (photoUrl && photoUrl.trim()) {
+        let imageUrl = photoUrl;
+        if (photoUrl.includes('drive.google.com')) {
+          const match = photoUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+          if (match) {
+            imageUrl = `https://drive.google.com/uc?export=view&id=${match[1]}`;
+          }
+        }
+        return `<img src="${imageUrl}" alt="${name}" class="w-full h-full object-cover" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='<div class=\\'w-full h-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-lg\\'>${name.charAt(0).toUpperCase()}</div>';">`;
+      }
+      return `<div class="w-full h-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-lg">${name.charAt(0).toUpperCase()}</div>`;
+    }
+
+    // Get current date info
+    function getCurrentDateInfo() {
+      const now = new Date();
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      return {
+        dayName: days[now.getDay()],
+        day: now.getDate(),
+        month: months[now.getMonth()],
+        year: now.getFullYear(),
+        fullDate: now.toISOString().split('T')[0]
+      };
+    }
+
+    // Trigger confetti
+    function triggerConfetti() {
+      const colors = ['#f59e0b', '#fbbf24', '#3b82f6', '#8b5cf6', '#ec4899'];
+      for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti-piece';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.animationDelay = Math.random() * 0.5 + 's';
+          confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
+          document.body.appendChild(confetti);
+          setTimeout(() => confetti.remove(), 5000);
+        }, i * 30);
+      }
+    }
+
+    // Get star intern
+    function getStarIntern() {
+      return appData.interns.find(i => i.isStarIntern === true);
+    }
+
+    // Toggle dark mode
+    function toggleDarkMode() {
+      darkMode = !darkMode;
+      localStorage.setItem('darkMode', darkMode);
+      document.body.classList.toggle('dark-mode', darkMode);
+      render();
+    }
+
+    // Toggle sidebar
+    function toggleSidebar() {
+      sidebarOpen = !sidebarOpen;
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.querySelector('.mobile-overlay');
+      if (sidebar) {
+        sidebar.classList.toggle('open', sidebarOpen);
+      }
+      if (overlay) {
+        overlay.classList.toggle('active', sidebarOpen);
+      }
+    }
+
+    function closeSidebar() {
+      sidebarOpen = false;
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.querySelector('.mobile-overlay');
+      if (sidebar) {
+        sidebar.classList.remove('open');
+      }
+      if (overlay) {
+        overlay.classList.remove('active');
+      }
+    }
+
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+    }
+
+    // Get attendance stats
+    function getAttendanceStats(internId) {
+      const attendance = appData.attendance.filter(a => a.internId === internId);
+      const uniqueDates = new Set();
+      attendance.forEach(a => {
+        if (a.dates) {
+          a.dates.split(',').forEach(d => uniqueDates.add(d.trim()));
+        }
+      });
+      return {
+        totalDays: uniqueDates.size,
+        records: attendance
+      };
+    }
+
+    // 🔥 FIREBASE REAL-TIME SYNC
+    function startFirestoreSync() {
+      if (unsubscribeFirestore) {
+        unsubscribeFirestore();
+      }
+
+      unsubscribeFirestore = db.collection(collectionName).onSnapshot((snapshot) => {
+        const allData = [];
+        snapshot.forEach((doc) => {
+          allData.push({ ...doc.data(), __firestoreId: doc.id });
+        });
+
+        appData.interns = allData.filter(d => d.type === 'intern');
+        appData.tasks = allData.filter(d => d.type === 'task');
+        appData.submissions = allData.filter(d => d.type === 'submission');
+        appData.tickets = allData.filter(d => d.type === 'ticket');
+        appData.attendance = allData.filter(d => d.type === 'attendance');
+        appData.projects = allData.filter(d => d.type === 'project');
+        appData.teams = allData.filter(d => d.type === 'team');
+        appData.meetings = allData.filter(d => d.type === 'meeting');
+        appData.settings = allData.filter(d => d.type === 'settings');
+
+        render();
+      }, (error) => {
+        console.error('Firestore sync error:', error);
+      });
+    }
+
+    // 🔥 FIREBASE OPERATIONS
+    async function createFirestoreDoc(data) {
+      try {
+        await db.collection(collectionName).add({
+          ...data,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        return { success: true };
+      } catch (error) {
+        console.error('Create error:', error);
+        return { success: false, error };
+      }
+    }
+
+    async function updateFirestoreDoc(data) {
+      try {
+        if (!data.__firestoreId) {
+          throw new Error('No Firestore ID found');
+        }
+        const docRef = db.collection(collectionName).doc(data.__firestoreId);
+        const { __firestoreId, ...updateData } = data;
+        await docRef.update({
+          ...updateData,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        return { success: true };
+      } catch (error) {
+        console.error('Update error:', error);
+        return { success: false, error };
+      }
+    }
+
+    async function deleteFirestoreDoc(data) {
+      try {
+        if (!data.__firestoreId) {
+          throw new Error('No Firestore ID found');
+        }
+        await db.collection(collectionName).doc(data.__firestoreId).delete();
+        return { success: true };
+      } catch (error) {
+        console.error('Delete error:', error);
+        return { success: false, error };
+      }
+    }
+
+    // Initialize
+    async function initApp() {
+      try {
+        startFirestoreSync();
+        render();
+      } catch (error) {
+        console.error('Init error:', error);
+        document.getElementById('app').innerHTML = `
+          <div class="text-center p-8">
+            <h2 class="text-2xl font-bold text-red-600 mb-4">Connection Error</h2>
+            <p class="text-slate-600">Unable to connect to Firebase. Please check your configuration.</p>
+          </div>
+        `;
+      }
+    }
+
+    // Star Intern Banner
+    function renderStarInternBanner() {
+      const starIntern = getStarIntern();
+      if (!starIntern) return '';
+
+      return `
+        <div class="mb-6 md:mb-8 relative overflow-hidden">
+          <div class="celebration-banner relative rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
+            <div class="absolute inset-0 bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-400 animate-pulse"></div>
+            
+            <div class="absolute inset-0 opacity-30">
+              <div class="absolute top-10 left-20 w-2 h-2 bg-white rounded-full sparkle desktop-only"></div>
+              <div class="absolute top-20 right-32 w-3 h-3 bg-white rounded-full sparkle desktop-only" style="animation-delay: 0.3s"></div>
+              <div class="absolute bottom-16 left-40 w-2 h-2 bg-white rounded-full sparkle desktop-only" style="animation-delay: 0.6s"></div>
+            </div>
+            
+            <div class="relative p-6 md:p-10">
+              <div class="flex flex-col md:flex-row items-center gap-4 md:gap-8">
+                <div class="relative flex-shrink-0">
+                  <div class="absolute inset-0 bg-yellow-400 rounded-full blur-2xl opacity-50 animate-pulse"></div>
+                  <div class="relative w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white shadow-2xl ring-4 ring-yellow-300">
+                    ${getAvatar(starIntern.name, starIntern.photoUrl)}
+                  </div>
+                  <div class="absolute -top-3 -right-3 md:-top-4 md:-right-4 w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full flex items-center justify-center shadow-lg float-animation">
+                    <svg class="w-6 h-6 md:w-10 md:h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                    </svg>
+                  </div>
+                </div>
+                
+                <div class="flex-1 text-center md:text-left">
+                  <div class="flex flex-col md:flex-row items-center justify-center md:justify-start gap-2 md:gap-3 mb-3">
+                    <svg class="w-8 h-8 md:w-10 md:h-10 text-white drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                    </svg>
+                    <h2 class="text-2xl md:text-4xl font-black text-white drop-shadow-2xl tracking-tight">
+                      STAR INTERN
+                    </h2>
+                  </div>
+                  <div class="mb-2">
+                    <span class="inline-block px-4 py-2 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg mb-2">
+                      <p class="text-xl md:text-2xl font-black bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+                        ${starIntern.name}
+                      </p>
+                    </span>
+                  </div>
+                  <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 md:gap-3">
+                    <span class="px-3 py-1 md:px-4 md:py-2 bg-white/80 backdrop-blur-sm rounded-lg text-amber-900 font-bold text-xs md:text-sm shadow-md">
+                      ${starIntern.role || 'Intern'}
+                    </span>
+                    <span class="px-3 py-1 md:px-4 md:py-2 bg-white/80 backdrop-blur-sm rounded-lg text-amber-900 font-bold text-xs md:text-sm shadow-md flex items-center gap-2">
+                      <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                      </svg>
+                      OF THE WEEK
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent opacity-50"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Login Page
+    function renderLoginPage() {
+      return `
+        <div class="h-full flex items-center justify-center gradient-bg p-4">
+          <div class="w-full max-w-md">
+            <div class="glass-effect rounded-2xl shadow-2xl p-6 md:p-8">
+              <div class="text-center mb-6 md:mb-8">
+                <div class="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg">
+                  <span class="text-white text-2xl md:text-3xl font-bold">SS</span>
+                </div>
+                <h1 class="text-xl md:text-2xl font-bold text-slate-800">${config.company_name || defaultConfig.company_name}</h1>
+                <p class="text-sm md:text-base text-slate-500 mt-1">${config.tagline || defaultConfig.tagline}</p>
+              </div>
+              
+              <form id="loginForm" class="space-y-4 md:space-y-5">
+                <div>
+                  <label for="loginEmail" class="block text-sm font-medium text-slate-700 mb-2">Email Address</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">${icons.mail}</span>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" required
+                      class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-base">
+                  </div>
+                </div>
+                
+                <div>
+                  <label for="loginPassword" class="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">${icons.user}</span>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required
+                      class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-base">
+                  </div>
+                </div>
+                
+                <div id="loginError" class="hidden text-red-500 text-sm text-center bg-red-50 p-3 rounded-lg"></div>
+                
+                <button type="submit" 
+                  class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl text-base">
+                  Sign In
+                </button>
+              </form>
+              
+              <p class="text-center text-slate-400 text-xs md:text-sm mt-4 md:mt-6">
+                🔥 Real-Time Sync Enabled • Secure Access
+              </p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Sidebar
+    function renderSidebar() {
+      const isAdmin = currentUser.role === 'admin';
+      const menuItems = isAdmin ? [
+        { id: 'dashboard', label: 'Dashboard', icon: icons.home },
+        { id: 'interns', label: 'Interns', icon: icons.users },
+        { id: 'tasks', label: 'Tasks', icon: icons.clipboard },
+        { id: 'projects', label: 'Projects', icon: icons.briefcase },
+        { id: 'teams', label: 'Teams', icon: icons.usersGroup },
+        { id: 'attendance', label: 'Attendance', icon: icons.calendar },
+        { id: 'tickets', label: 'Tickets', icon: icons.ticket }
+      ] : [
+        { id: 'dashboard', label: 'Dashboard', icon: icons.home },
+        { id: 'my-tasks', label: 'My Tasks', icon: icons.clipboard },
+        { id: 'my-projects', label: 'My Projects', icon: icons.briefcase },
+        { id: 'my-team', label: 'My Team', icon: icons.usersGroup },
+        { id: 'submit-ticket', label: 'Support', icon: icons.ticket }
+      ];
+
+      return `
+        <aside class="sidebar w-64 bg-white border-r border-slate-200 flex flex-col h-full ${sidebarOpen ? 'open' : ''}">
+          <div class="p-4 md:p-6 border-b border-slate-200">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center">
+                  <span class="text-white font-bold text-sm">SS</span>
+                </div>
+                <div>
+                  <h2 class="font-bold text-slate-800 text-sm">${config.company_name || defaultConfig.company_name}</h2>
+                  <p class="text-xs text-slate-500">${isAdmin ? 'Admin' : 'Intern'} Portal</p>
+                </div>
+              </div>
+              <button onclick="toggleSidebar()" class="mobile-only text-slate-600">
+                ${icons.x}
+              </button>
+            </div>
+          </div>
+          
+          <div class="p-4 border-b border-slate-200">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                ${getAvatar(currentUser.name, currentUser.photoUrl)}
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold text-slate-800 text-sm truncate">${currentUser.name}</p>
+                <p class="text-xs text-slate-500 truncate">${currentUser.role}</p>
+              </div>
+            </div>
+          </div>
+          
+          <nav class="flex-1 p-4 space-y-1 overflow-y-auto scrollbar-thin">
+            ${menuItems.map(item => `
+              <button onclick="navigateTo('${item.id}')" 
+                class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:text-slate-900 ${currentPage === item.id ? 'active text-blue-600' : ''}">
+                <span class="${currentPage === item.id ? 'text-blue-600' : 'text-slate-400'}">${item.icon}</span>
+                <span class="font-medium text-sm">${item.label}</span>
+              </button>
+            `).join('')}
+          </nav>
+          
+          <div class="p-4 border-t border-slate-200">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-sm text-slate-600 font-medium">Dark Mode</span>
+              <button onclick="toggleDarkMode()" class="dark-mode-toggle ${darkMode ? 'active' : ''}">
+                <div class="dark-mode-toggle-circle">
+                  ${darkMode ? icons.moon : icons.sun}
+                </div>
+              </button>
+            </div>
+            <button onclick="logout()" 
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors">
+              ${icons.logout}
+              <span class="font-medium text-sm">Sign Out</span>
+            </button>
+          </div>
+        </aside>
+      `;
+    }
+
+    // Mobile Header
+    function renderMobileHeader() {
+      return `
+        <div class="mobile-only sticky top-0 z-50 bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between">
+          <button onclick="toggleSidebar()" class="text-slate-600 p-2">
+            ${icons.menu}
+          </button>
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-xs">SS</span>
+            </div>
+            <h2 class="font-bold text-slate-800 text-sm">${config.company_name || defaultConfig.company_name}</h2>
+          </div>
+          <div class="w-8 h-8"></div>
+        </div>
+      `;
+    }
+
+    // Admin Dashboard
+    function renderAdminDashboard() {
+      const dateInfo = getCurrentDateInfo();
+      const activeInterns = appData.interns.filter(i => i.status === 'active').length;
+      const pendingTickets = appData.tickets.filter(t => t.ticketStatus === 'open').length;
+      
+      return `
+        <div class="p-4 md:p-8">
+          ${renderStarInternBanner()}
+          
+          <div class="mb-6 md:mb-8">
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Welcome back, Admin! 👋</h1>
+            <p class="text-sm md:text-base text-slate-500 mt-1">${dateInfo.dayName}, ${dateInfo.month} ${dateInfo.day}, ${dateInfo.year}</p>
+          </div>
+          
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 md:p-6 text-white card-hover">
+              <div class="text-2xl md:text-4xl mb-2">${icons.users}</div>
+              <h3 class="text-2xl md:text-3xl font-bold">${activeInterns}</h3>
+              <p class="text-blue-100 text-xs md:text-sm">Active Interns</p>
+            </div>
+            
+            <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-4 md:p-6 text-white card-hover">
+              <div class="text-2xl md:text-4xl mb-2">${icons.clipboard}</div>
+              <h3 class="text-2xl md:text-3xl font-bold">${appData.tasks.length}</h3>
+              <p class="text-purple-100 text-xs md:text-sm">Total Tasks</p>
+            </div>
+            
+            <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 md:p-6 text-white card-hover">
+              <div class="text-2xl md:text-4xl mb-2">${icons.briefcase}</div>
+              <h3 class="text-2xl md:text-3xl font-bold">${appData.projects.length}</h3>
+              <p class="text-green-100 text-xs md:text-sm">Active Projects</p>
+            </div>
+            
+            <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-4 md:p-6 text-white card-hover">
+              <div class="text-2xl md:text-4xl mb-2">${icons.ticket}</div>
+              <h3 class="text-2xl md:text-3xl font-bold">${pendingTickets}</h3>
+              <p class="text-orange-100 text-xs md:text-sm">Open Tickets</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Intern Dashboard
+    function renderInternDashboard() {
+      const dateInfo = getCurrentDateInfo();
+      const myTasks = appData.tasks.filter(t => t.assignedTo === currentUser.id || t.assignedTo === 'all');
+      const mySubmissions = appData.submissions.filter(s => s.submittedBy === currentUser.id);
+      const myTickets = appData.tickets.filter(t => t.raisedBy === currentUser.id);
+      const attendanceStats = getAttendanceStats(currentUser.id);
+      
+      return `
+        <div class="p-4 md:p-8">
+          ${renderStarInternBanner()}
+          
+          <div class="mb-6 md:mb-8">
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Welcome back, ${currentUser.name}! 🎉</h1>
+            <p class="text-sm md:text-base text-slate-500 mt-1">${dateInfo.dayName}, ${dateInfo.month} ${dateInfo.day}, ${dateInfo.year}</p>
+          </div>
+          
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+            <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
+              <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                <div class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+                  ${icons.clipboard}
+                </div>
+                <h3 class="font-semibold text-slate-800 text-xs md:text-sm">My Tasks</h3>
+              </div>
+              <p class="text-2xl md:text-3xl font-bold text-slate-800">${myTasks.length}</p>
+              <p class="text-xs md:text-sm text-slate-500 mt-1">Assigned to you</p>
+            </div>
+            
+            <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
+              <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                <div class="w-8 h-8 md:w-10 md:h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
+                  ${icons.checkCircle}
+                </div>
+                <h3 class="font-semibold text-slate-800 text-xs md:text-sm">Submissions</h3>
+              </div>
+              <p class="text-2xl md:text-3xl font-bold text-slate-800">${mySubmissions.length}</p>
+              <p class="text-xs md:text-sm text-slate-500 mt-1">Tasks submitted</p>
+            </div>
+            
+            <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
+              <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                <div class="w-8 h-8 md:w-10 md:h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600">
+                  ${icons.calendar}
+                </div>
+                <h3 class="font-semibold text-slate-800 text-xs md:text-sm">Attendance</h3>
+              </div>
+              <p class="text-2xl md:text-3xl font-bold text-slate-800">${attendanceStats.totalDays}</p>
+              <p class="text-xs md:text-sm text-slate-500 mt-1">Days present</p>
+            </div>
+            
+            <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
+              <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                <div class="w-8 h-8 md:w-10 md:h-10 bg-orange-100 rounded-lg flex items-center justify-center text-orange-600">
+                  ${icons.ticket}
+                </div>
+                <h3 class="font-semibold text-slate-800 text-xs md:text-sm">Support</h3>
+              </div>
+              <p class="text-2xl md:text-3xl font-bold text-slate-800">${myTickets.length}</p>
+              <p class="text-xs md:text-sm text-slate-500 mt-1">Tickets raised</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Interns Management
+    function renderInternsPage() {
+      const starIntern = getStarIntern();
+      
+      return `
+        <div class="p-4 md:p-8">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
+            <div>
+              <h1 class="text-xl md:text-2xl font-bold text-slate-800">Intern Management</h1>
+              <p class="text-sm md:text-base text-slate-500">Manage your team • 🔥 Live Sync</p>
+            </div>
+            <button onclick="openModal('addIntern')" 
+              class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+              ${icons.plus}
+              <span>Add Intern</span>
+            </button>
+          </div>
+          
+          ${starIntern ? `
+            <div class="mb-6 md:mb-8 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl md:rounded-2xl p-4 md:p-6">
+              <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4 mb-3">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full flex items-center justify-center shadow-lg">
+                  <svg class="w-5 h-5 md:w-7 md:h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-base md:text-lg font-bold text-amber-900">Current Star Intern</h3>
+                  <p class="text-xs md:text-sm text-amber-700">Featured across all dashboards</p>
+                </div>
+              </div>
+              <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4 p-3 md:p-4 bg-white rounded-xl border border-amber-200">
+                <div class="w-12 h-12 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-amber-400 shadow-md">
+                  ${getAvatar(starIntern.name, starIntern.photoUrl)}
+                </div>
+                <div class="flex-1">
+                  <p class="font-bold text-slate-800 text-base md:text-lg">${starIntern.name}</p>
+                  <p class="text-slate-600 text-xs md:text-sm">${starIntern.role}</p>
+                </div>
+                <button onclick="removeStarIntern('${starIntern.id}')" 
+                  class="w-full sm:w-auto px-3 md:px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors text-xs md:text-sm font-medium">
+                  Remove Star
+                </button>
+              </div>
+            </div>
+          ` : ''}
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            ${appData.interns.length > 0 ? appData.interns.map(intern => {
+              const attendanceStats = getAttendanceStats(intern.id);
+              const isStarIntern = intern.isStarIntern === true;
+              
+              return `
+                <div class="bg-white rounded-xl p-4 md:p-6 border ${isStarIntern ? 'border-amber-300 ring-2 ring-amber-200' : 'border-slate-200'} card-hover relative overflow-hidden">
+                  ${isStarIntern ? `
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-400"></div>
+                    <div class="absolute -top-8 -right-8 w-24 h-24 bg-amber-100 rounded-full opacity-50"></div>
+                  ` : ''}
+                  
+                  <div class="relative">
+                    <div class="flex items-start gap-3 md:gap-4 mb-4">
+                      <div class="relative">
+                        <div class="w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden flex-shrink-0 ${isStarIntern ? 'ring-2 ring-amber-400' : ''}">
+                          ${getAvatar(intern.name, intern.photoUrl)}
+                        </div>
+                        ${isStarIntern ? `
+                          <div class="absolute -bottom-1 -right-1 w-5 h-5 md:w-6 md:h-6 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full flex items-center justify-center shadow-md">
+                            <svg class="w-3 h-3 md:w-4 md:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                            </svg>
+                          </div>
+                        ` : ''}
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <h3 class="font-bold text-slate-800 truncate text-sm md:text-base">${intern.name}</h3>
+                        <p class="text-xs md:text-sm text-slate-500 truncate">${intern.email}</p>
+                        <span class="inline-block mt-2 px-2 md:px-3 py-1 ${isStarIntern ? 'bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 font-bold' : 'bg-blue-100 text-blue-700'} rounded-full text-xs">
+                          ${intern.role}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 text-xs md:text-sm text-slate-600 mb-4">
+                      ${icons.calendar}
+                      <span>${attendanceStats.totalDays} days active</span>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                      ${!isStarIntern ? `
+                        <button onclick="setStarIntern('${intern.id}')" 
+                          class="flex-1 px-2 md:px-3 py-2 bg-gradient-to-r from-yellow-400 to-amber-500 text-white rounded-lg text-xs font-bold hover:from-yellow-500 hover:to-amber-600 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1 md:gap-2">
+                          <svg class="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                          </svg>
+                          <span class="hidden sm:inline">Make Star</span>
+                          <span class="sm:hidden">Star</span>
+                        </button>
+                      ` : `
+                        <button onclick="removeStarIntern('${intern.id}')" 
+                          class="flex-1 px-2 md:px-3 py-2 bg-slate-100 text-slate-600 rounded-lg text-xs font-medium hover:bg-slate-200 transition-colors">
+                          Remove Star
+                        </button>
+                      `}
+                      <button onclick="confirmDeleteIntern('${intern.id}')" 
+                        class="px-2 md:px-3 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors delete-btn">
+                        ${icons.trash}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('') : `
+              <div class="col-span-full bg-white rounded-xl p-8 md:p-12 border border-slate-200 text-center text-slate-400">
+                <p class="text-base md:text-lg mb-2">No interns yet</p>
+                <p class="text-xs md:text-sm">Click "Add Intern" to get started</p>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    // Attendance Page
+    function renderAttendancePage() {
+      return `
+        <div class="p-4 md:p-8">
+          <div class="mb-6 md:mb-8">
+            <h1 class="text-xl md:text-2xl font-bold text-slate-800">Attendance Management</h1>
+            <p class="text-sm md:text-base text-slate-500">Track intern attendance</p>
+          </div>
+          
+          <div class="grid grid-cols-1 gap-4 md:gap-6">
+            ${appData.interns.map(intern => {
+              const stats = getAttendanceStats(intern.id);
+              return `
+                <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200">
+                  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                    <div class="flex items-center gap-3 md:gap-4">
+                      <div class="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden">
+                        ${getAvatar(intern.name, intern.photoUrl)}
+                      </div>
+                      <div>
+                        <h3 class="font-bold text-slate-800 text-sm md:text-base">${intern.name}</h3>
+                        <p class="text-xs md:text-sm text-slate-500">${stats.totalDays} days active</p>
+                      </div>
+                    </div>
+                    <button onclick="openAttendanceModal('${intern.id}')" 
+                      class="w-full sm:w-auto px-3 md:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs md:text-sm font-medium">
+                      Update Attendance
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Tasks Page
+    function renderTasksPage() {
+      return `
+        <div class="p-4 md:p-8">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
+            <div>
+              <h1 class="text-xl md:text-2xl font-bold text-slate-800">Task Management</h1>
+              <p class="text-sm md:text-base text-slate-500">Create and manage tasks</p>
+            </div>
+            <button onclick="openModal('addTask')" 
+              class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+              ${icons.plus}
+              <span>Create Task</span>
+            </button>
+          </div>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+            ${appData.tasks.length > 0 ? appData.tasks.map(task => {
+              const submissions = appData.submissions.filter(s => s.taskId === task.id);
+              return `
+                <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
+                  <div class="flex items-start justify-between mb-3 gap-3">
+                    <h3 class="font-bold text-slate-800 flex-1 text-sm md:text-base">${task.title}</h3>
+                    <span class="px-2 py-1 text-xs font-medium rounded whitespace-nowrap ${
+                      task.priority === 'high' ? 'bg-red-100 text-red-700' :
+                      task.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                      'bg-green-100 text-green-700'
+                    }">${task.priority || 'low'}</span>
+                  </div>
+                  <p class="text-slate-600 text-xs md:text-sm mb-4 line-clamp-2">${task.description}</p>
+                  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs md:text-sm">
+                    <span class="text-slate-500">Due: ${new Date(task.deadline).toLocaleDateString()}</span>
+                    <span class="text-blue-600 font-medium">${submissions.length} submissions</span>
+                  </div>
+                </div>
+              `;
+            }).join('') : `
+              <div class="col-span-full bg-white rounded-xl p-8 md:p-12 border border-slate-200 text-center text-slate-400">
+                <p class="text-sm md:text-base">No tasks yet. Click "Create Task" to add one.</p>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    // Projects Page
+    function renderProjectsPage() {
+      return `
+        <div class="p-4 md:p-8">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
+            <div>
+              <h1 class="text-xl md:text-2xl font-bold text-slate-800">Project Management</h1>
+              <p class="text-sm md:text-base text-slate-500">Track ongoing projects</p>
+            </div>
+            <button onclick="openModal('addProject')" 
+              class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+              ${icons.plus}
+              <span>Add Project</span>
+            </button>
+          </div>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+            ${appData.projects.length > 0 ? appData.projects.map(project => `
+              <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
+                <div class="flex items-start justify-between mb-3 gap-3">
+                  <h3 class="font-bold text-slate-800 flex-1 text-sm md:text-base">${project.projectTitle}</h3>
+                  <span class="px-2 py-1 text-xs font-medium rounded whitespace-nowrap ${
+                    project.projectStatus === 'completed' ? 'bg-green-100 text-green-700' :
+                    project.projectStatus === 'in-progress' ? 'bg-blue-100 text-blue-700' :
+                    'bg-yellow-100 text-yellow-700'
+                  }">${project.projectStatus || 'planning'}</span>
+                </div>
+                <p class="text-slate-600 text-xs md:text-sm mb-4 line-clamp-2">${project.projectDescription}</p>
+                ${project.technologies ? `
+                  <div class="flex flex-wrap gap-2 mb-4">
+                    ${project.technologies.split(',').map(tech => `
+                      <span class="px-2 py-1 bg-slate-100 text-slate-700 rounded text-xs">${tech.trim()}</span>
+                    `).join('')}
+                  </div>
+                ` : ''}
+                <div class="text-xs md:text-sm text-slate-500">
+                  ${project.startDate ? `Started: ${new Date(project.startDate).toLocaleDateString()}` : ''}
+                </div>
+              </div>
+            `).join('') : `
+              <div class="col-span-full bg-white rounded-xl p-8 md:p-12 border border-slate-200 text-center text-slate-400">
+                <p class="text-sm md:text-base">No projects yet. Click "Add Project" to create one.</p>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    // Teams Page
+    function renderTeamsPage() {
+      return `
+        <div class="p-4 md:p-8">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
+            <div>
+              <h1 class="text-xl md:text-2xl font-bold text-slate-800">Team Management</h1>
+              <p class="text-sm md:text-base text-slate-500">Organize interns into teams</p>
+            </div>
+            <button onclick="openModal('addTeam')" 
+              class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+              ${icons.plus}
+              <span>Create Team</span>
+            </button>
+          </div>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+            ${appData.teams.length > 0 ? appData.teams.map(team => {
+              const memberIds = team.members ? team.members.split(',') : [];
+              const members = appData.interns.filter(i => memberIds.includes(i.id));
+              return `
+                <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
+                  <h3 class="font-bold text-slate-800 mb-2 text-sm md:text-base">${team.teamName}</h3>
+                  <p class="text-slate-600 text-xs md:text-sm mb-4 line-clamp-2">${team.teamDescription}</p>
+                  <div class="flex items-center gap-2 mb-4">
+                    ${members.slice(0, 5).map(m => `
+                      <div class="w-8 h-8 rounded-full overflow-hidden" title="${m.name}">
+                        ${getAvatar(m.name, m.photoUrl)}
+                      </div>
+                    `).join('')}
+                    ${members.length > 5 ? `
+                      <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-xs text-slate-600">
+                        +${members.length - 5}
+                      </div>
+                    ` : ''}
+                  </div>
+                  <p class="text-xs md:text-sm text-slate-500">${members.length} members</p>
+                </div>
+              `;
+            }).join('') : `
+              <div class="col-span-full bg-white rounded-xl p-8 md:p-12 border border-slate-200 text-center text-slate-400">
+                <p class="text-sm md:text-base">No teams yet. Click "Create Team" to add one.</p>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    // Tickets Page
+    function renderTicketsPage() {
+      return `
+        <div class="p-4 md:p-8">
+          <div class="mb-6 md:mb-8">
+            <h1 class="text-xl md:text-2xl font-bold text-slate-800">Support Tickets</h1>
+            <p class="text-sm md:text-base text-slate-500">Manage intern support requests</p>
+          </div>
+          
+          <div class="space-y-4">
+            ${appData.tickets.length > 0 ? appData.tickets.map(ticket => `
+              <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200">
+                <div class="flex flex-col sm:flex-row items-start justify-between gap-3 mb-3">
+                  <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 md:gap-3 mb-2">
+                      <h3 class="font-bold text-slate-800 text-sm md:text-base">${ticket.message}</h3>
+                      <span class="px-2 py-1 text-xs font-medium rounded ${
+                        ticket.priority === 'high' ? 'bg-red-100 text-red-700' :
+                        ticket.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                        'bg-blue-100 text-blue-700'
+                      }">${ticket.priority || 'low'}</span>
+                      <span class="px-2 py-1 text-xs font-medium rounded ${
+                        ticket.ticketStatus === 'open' ? 'bg-orange-100 text-orange-700' :
+                        'bg-green-100 text-green-700'
+                      }">${ticket.ticketStatus}</span>
+                    </div>
+                    <p class="text-xs md:text-sm text-slate-500">Raised by: ${ticket.raisedByName || 'Unknown'}</p>
+                  </div>
+                  ${ticket.ticketStatus === 'open' ? `
+                    <button onclick="resolveTicket('${ticket.id}')" 
+                      class="w-full sm:w-auto px-3 md:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs md:text-sm">
+                      Resolve
+                    </button>
+                  ` : ''}
+                </div>
+              </div>
+            `).join('') : `
+              <div class="bg-white rounded-xl p-8 md:p-12 border border-slate-200 text-center text-slate-400">
+                <p class="text-sm md:text-base">No tickets yet</p>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    // Intern My Tasks
+    function renderMyTasksPage() {
+      const myTasks = appData.tasks.filter(t => t.assignedTo === currentUser.id || t.assignedTo === 'all');
+      
+      return `
+        <div class="p-4 md:p-8">
+          <div class="mb-6 md:mb-8">
+            <h1 class="text-xl md:text-2xl font-bold text-slate-800">My Tasks</h1>
+            <p class="text-sm md:text-base text-slate-500">Your assigned tasks</p>
+          </div>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+            ${myTasks.length > 0 ? myTasks.map(task => {
+              const mySubmission = appData.submissions.find(s => s.taskId === task.id && s.submittedBy === currentUser.id);
+              return `
+                <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
+                  <div class="flex items-start justify-between mb-3 gap-3">
+                    <h3 class="font-bold text-slate-800 flex-1 text-sm md:text-base">${task.title}</h3>
+                    ${mySubmission ? `
+                      <span class="px-2 py-1 text-xs font-medium rounded whitespace-nowrap ${
+                        mySubmission.grade ? 'bg-green-100 text-green-700' :
+                        mySubmission.submissionStatus === 'approved' ? 'bg-green-100 text-green-700' :
+                        'bg-blue-100 text-blue-700'
+                      }">${mySubmission.grade || 'Submitted'}</span>
+                    ` : ''}
+                  </div>
+                  <p class="text-slate-600 text-xs md:text-sm mb-4 line-clamp-2">${task.description}</p>
+                  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                    <span class="text-xs md:text-sm text-slate-500">Due: ${new Date(task.deadline).toLocaleDateString()}</span>
+                    ${!mySubmission ? `
+                      <button onclick="openSubmitTaskModal('${task.id}')" 
+                        class="w-full sm:w-auto px-3 md:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-xs md:text-sm">
+                        Submit
+                      </button>
+                    ` : mySubmission.grade ? `
+                      <span class="text-xs md:text-sm font-medium text-green-600">Grade: ${mySubmission.grade}</span>
+                    ` : ''}
+                  </div>
+                </div>
+              `;
+            }).join('') : `
+              <div class="col-span-full bg-white rounded-xl p-8 md:p-12 border border-slate-200 text-center text-slate-400">
+                <p class="text-sm md:text-base">No tasks assigned yet</p>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    // Submit Ticket Page
+    function renderSubmitTicketPage() {
+      const myTickets = appData.tickets.filter(t => t.raisedBy === currentUser.id);
+      
+      return `
+        <div class="p-4 md:p-8">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
+            <div>
+              <h1 class="text-xl md:text-2xl font-bold text-slate-800">Support Center</h1>
+              <p class="text-sm md:text-base text-slate-500">Get help from the team</p>
+            </div>
+            <button onclick="openModal('raiseTicket')" 
+              class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+              ${icons.plus}
+              <span>Raise Ticket</span>
+            </button>
+          </div>
+          
+          <div class="space-y-4">
+            ${myTickets.length > 0 ? myTickets.map(ticket => `
+              <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200">
+                <div class="flex items-start justify-between">
+                  <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 md:gap-3 mb-2">
+                      <h3 class="font-bold text-slate-800 text-sm md:text-base">${ticket.message}</h3>
+                      <span class="px-2 py-1 text-xs font-medium rounded ${
+                        ticket.ticketStatus === 'open' ? 'bg-orange-100 text-orange-700' :
+                        'bg-green-100 text-green-700'
+                      }">${ticket.ticketStatus}</span>
+                    </div>
+                    <p class="text-xs md:text-sm text-slate-500">Created: ${ticket.createdAt ? new Date(ticket.createdAt.seconds * 1000).toLocaleDateString() : 'Just now'}</p>
+                  </div>
+                </div>
+              </div>
+            `).join('') : `
+              <div class="bg-white rounded-xl p-8 md:p-12 border border-slate-200 text-center text-slate-400">
+                <p class="text-sm md:text-base">No tickets yet. Click "Raise Ticket" to get support.</p>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    // Modals
+    function renderModals() {
+      let html = '';
+
+      // Add Intern Modal
+      if (modals.addIntern) {
+        html += `
+          <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+              <div class="sticky top-0 bg-white flex items-center justify-between p-4 md:p-6 border-b border-slate-200">
+                <h3 class="text-base md:text-lg font-bold text-slate-800">Add New Intern</h3>
+                <button onclick="closeModal('addIntern')" class="text-slate-400 hover:text-slate-600">
+                  ${icons.x}
+                </button>
+              </div>
+              <form id="addInternForm" class="p-4 md:p-6 space-y-4">
+                <div>
+                  <label for="internName" class="block text-sm font-medium text-slate-700 mb-2">Full Name</label>
+                  <input type="text" id="internName" required 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <div>
+                  <label for="internEmail" class="block text-sm font-medium text-slate-700 mb-2">Email</label>
+                  <input type="email" id="internEmail" required 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <div>
+                  <label for="internPassword" class="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                  <input type="text" id="internPassword" required 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <div>
+                  <label for="internRole" class="block text-sm font-medium text-slate-700 mb-2">Custom Role</label>
+                  <input type="text" id="internRole" placeholder="e.g. Full Stack Developer" required 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <div>
+                  <label for="internPhoto" class="block text-sm font-medium text-slate-700 mb-2">Photo URL</label>
+                  <input type="url" id="internPhoto" placeholder="Imgur or Cloudinary URL" 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                  <p class="text-xs text-slate-500 mt-1">📸 Upload to <a href="https://imgur.com/upload" target="_blank" class="text-blue-600 hover:underline">Imgur</a>, then paste the image URL</p>
+                </div>
+                <div class="flex gap-3 pt-4">
+                  <button type="button" onclick="closeModal('addIntern')" 
+                    class="flex-1 px-4 py-3 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm md:text-base">
+                    Cancel
+                  </button>
+                  <button type="submit" id="addInternBtn"
+                    class="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm md:text-base">
+                    Add Intern
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        `;
+      }
+
+      // Add Task Modal
+      if (modals.addTask) {
+        html += `
+          <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+              <div class="flex items-center justify-between p-4 md:p-6 border-b border-slate-200">
+                <h3 class="text-base md:text-lg font-bold text-slate-800">Create Task</h3>
+                <button onclick="closeModal('addTask')" class="text-slate-400 hover:text-slate-600">
+                  ${icons.x}
+                </button>
+              </div>
+              <form id="addTaskForm" class="p-4 md:p-6 space-y-4">
+                <div>
+                  <label for="taskTitle" class="block text-sm font-medium text-slate-700 mb-2">Task Title</label>
+                  <input type="text" id="taskTitle" required 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <div>
+                  <label for="taskDescription" class="block text-sm font-medium text-slate-700 mb-2">Description</label>
+                  <textarea id="taskDescription" rows="3" required 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base"></textarea>
+                </div>
+                <div>
+                  <label for="taskDeadline" class="block text-sm font-medium text-slate-700 mb-2">Deadline</label>
+                  <input type="date" id="taskDeadline" required 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <div>
+                  <label for="taskPriority" class="block text-sm font-medium text-slate-700 mb-2">Priority</label>
+                  <select id="taskPriority" 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="taskAssign" class="block text-sm font-medium text-slate-700 mb-2">Assign To</label>
+                  <select id="taskAssign" 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                    <option value="all">All Interns</option>
+                    ${appData.interns.map(i => `<option value="${i.id}">${i.name}</option>`).join('')}
+                  </select>
+                </div>
+                <div class="flex gap-3 pt-4">
+                  <button type="button" onclick="closeModal('addTask')" 
+                    class="flex-1 px-4 py-3 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm md:text-base">
+                    Cancel
+                  </button>
+                  <button type="submit" id="addTaskBtn"
+                    class="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm md:text-base">
+                    Create
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        `;
+      }
+
+      // Add Project Modal
+      if (modals.addProject) {
+        html += `
+          <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+              <div class="flex items-center justify-between p-4 md:p-6 border-b border-slate-200">
+                <h3 class="text-base md:text-lg font-bold text-slate-800">Add Project</h3>
+                <button onclick="closeModal('addProject')" class="text-slate-400 hover:text-slate-600">
+                  ${icons.x}
+                </button>
+              </div>
+              <form id="addProjectForm" class="p-4 md:p-6 space-y-4">
+                <div>
+                  <label for="projectTitle" class="block text-sm font-medium text-slate-700 mb-2">Project Title</label>
+                  <input type="text" id="projectTitle" required 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <div>
+                  <label for="projectDescription" class="block text-sm font-medium text-slate-700 mb-2">Description</label>
+                  <textarea id="projectDescription" rows="3" required 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base"></textarea>
+                </div>
+                <div>
+                  <label for="projectTech" class="block text-sm font-medium text-slate-700 mb-2">Technologies (comma separated)</label>
+                  <input type="text" id="projectTech" placeholder="React, Node.js, MongoDB" 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <div>
+                  <label for="projectStatus" class="block text-sm font-medium text-slate-700 mb-2">Status</label>
+                  <select id="projectStatus" 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                    <option value="planning">Planning</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </div>
+                <div class="flex gap-3 pt-4">
+                  <button type="button" onclick="closeModal('addProject')" 
+                    class="flex-1 px-4 py-3 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm md:text-base">
+                    Cancel
+                  </button>
+                  <button type="submit" id="addProjectBtn"
+                    class="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm md:text-base">
+                    Add
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        `;
+      }
+
+      // Add Team Modal
+      if (modals.addTeam) {
+        html += `
+          <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+              <div class="sticky top-0 bg-white flex items-center justify-between p-4 md:p-6 border-b border-slate-200">
+                <h3 class="text-base md:text-lg font-bold text-slate-800">Create Team</h3>
+                <button onclick="closeModal('addTeam')" class="text-slate-400 hover:text-slate-600">
+                  ${icons.x}
+                </button>
+              </div>
+              <form id="addTeamForm" class="p-4 md:p-6 space-y-4">
+                <div>
+                  <label for="teamName" class="block text-sm font-medium text-slate-700 mb-2">Team Name</label>
+                  <input type="text" id="teamName" required 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <div>
+                  <label for="teamDescription" class="block text-sm font-medium text-slate-700 mb-2">Description</label>
+                  <textarea id="teamDescription" rows="2" required 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base"></textarea>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-2">Select Members</label>
+                  <div class="max-h-48 overflow-y-auto border border-slate-200 rounded-lg p-3 space-y-2">
+                    ${appData.interns.map(intern => `
+                      <label class="flex items-center gap-2 cursor-pointer hover:bg-slate-50 p-2 rounded">
+                        <input type="checkbox" value="${intern.id}" class="team-member-checkbox w-4 h-4">
+                        <span class="text-sm text-slate-700">${intern.name}</span>
+                      </label>
+                    `).join('')}
+                  </div>
+                </div>
+                <div class="flex gap-3 pt-4">
+                  <button type="button" onclick="closeModal('addTeam')" 
+                    class="flex-1 px-4 py-3 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm md:text-base">
+                    Cancel
+                  </button>
+                  <button type="submit" id="addTeamBtn"
+                    class="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm md:text-base">
+                    Create
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        `;
+      }
+
+      // Attendance Modal
+      if (modals.attendance) {
+        const intern = appData.interns.find(i => i.id === selectedInternId);
+        if (intern) {
+          html += `
+            <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+              <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+                <div class="flex items-center justify-between p-4 md:p-6 border-b border-slate-200">
+                  <h3 class="text-base md:text-lg font-bold text-slate-800">Update Attendance - ${intern.name}</h3>
+                  <button onclick="closeModal('attendance')" class="text-slate-400 hover:text-slate-600">
+                    ${icons.x}
+                  </button>
+                </div>
+                <form id="attendanceForm" class="p-4 md:p-6 space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Select Dates (comma separated or range)</label>
+                    <input type="text" id="attendanceDates" placeholder="2024-01-01, 2024-01-02 or 2024-01-01 to 2024-01-10" required 
+                      class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                    <p class="text-xs text-slate-500 mt-2">Examples: "2024-01-01, 2024-01-05" or "2024-01-01 to 2024-01-31"</p>
+                  </div>
+                  <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeModal('attendance')" 
+                      class="flex-1 px-4 py-3 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm md:text-base">
+                      Cancel
+                    </button>
+                    <button type="submit" id="attendanceBtn"
+                      class="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm md:text-base">
+                      Update
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      // Submit Task Modal
+      if (modals.submitTask) {
+        const task = appData.tasks.find(t => t.id === selectedInternId);
+        if (task) {
+          html += `
+            <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+              <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+                <div class="flex items-center justify-between p-4 md:p-6 border-b border-slate-200">
+                  <h3 class="text-base md:text-lg font-bold text-slate-800">Submit Task</h3>
+                  <button onclick="closeModal('submitTask')" class="text-slate-400 hover:text-slate-600">
+                    ${icons.x}
+                  </button>
+                </div>
+                <form id="submitTaskForm" class="p-4 md:p-6 space-y-4">
+                  <div>
+                    <p class="text-sm font-medium text-slate-700 mb-2">Task: ${task.title}</p>
+                  </div>
+                  <div>
+                    <label for="submissionText" class="block text-sm font-medium text-slate-700 mb-2">Submission Details</label>
+                    <textarea id="submissionText" rows="4" required 
+                      class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base"></textarea>
+                  </div>
+                  <div>
+                    <label for="submissionUrl" class="block text-sm font-medium text-slate-700 mb-2">URL (Optional)</label>
+                    <input type="url" id="submissionUrl" placeholder="https://github.com/..." 
+                      class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                  </div>
+                  <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeModal('submitTask')" 
+                      class="flex-1 px-4 py-3 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm md:text-base">
+                      Cancel
+                    </button>
+                    <button type="submit" id="submitTaskBtn"
+                      class="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm md:text-base">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      // Raise Ticket Modal
+      if (modals.raiseTicket) {
+        html += `
+          <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+              <div class="flex items-center justify-between p-4 md:p-6 border-b border-slate-200">
+                <h3 class="text-base md:text-lg font-bold text-slate-800">Raise Support Ticket</h3>
+                <button onclick="closeModal('raiseTicket')" class="text-slate-400 hover:text-slate-600">
+                  ${icons.x}
+                </button>
+              </div>
+              <form id="raiseTicketForm" class="p-4 md:p-6 space-y-4">
+                <div>
+                  <label for="ticketMessage" class="block text-sm font-medium text-slate-700 mb-2">Issue Description</label>
+                  <textarea id="ticketMessage" rows="4" required 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base"></textarea>
+                </div>
+                <div>
+                  <label for="ticketPriority" class="block text-sm font-medium text-slate-700 mb-2">Priority</label>
+                  <select id="ticketPriority" 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
+                <div class="flex gap-3 pt-4">
+                  <button type="button" onclick="closeModal('raiseTicket')" 
+                    class="flex-1 px-4 py-3 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm md:text-base">
+                    Cancel
+                  </button>
+                  <button type="submit" id="raiseTicketBtn"
+                    class="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm md:text-base">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        `;
+      }
+
+      // Delete Confirmation
+      if (confirmDelete) {
+        const intern = appData.interns.find(i => i.id === confirmDelete);
+        if (intern) {
+          html += `
+            <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+              <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-4 md:p-6">
+                <h3 class="text-base md:text-lg font-bold text-slate-800 mb-4">Confirm Delete</h3>
+                <p class="text-sm md:text-base text-slate-600 mb-6">Are you sure you want to delete <strong>${intern.name}</strong>? This action cannot be undone.</p>
+                <div class="flex gap-3">
+                  <button onclick="cancelDelete()" 
+                    class="flex-1 px-4 py-3 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm md:text-base">
+                    Cancel
+                  </button>
+                  <button onclick="deleteIntern('${confirmDelete}')" 
+                    class="flex-1 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm md:text-base">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      return html;
+    }
+
+    // Main render
+    function render() {
+      const app = document.getElementById('app');
+      
+      if (!currentUser) {
+        app.innerHTML = renderLoginPage();
+        attachLoginHandler();
+      } else {
+        const isAdmin = currentUser.role === 'admin';
+        let content = '';
+        
+        if (isAdmin) {
+          switch (currentPage) {
+            case 'dashboard': content = renderAdminDashboard(); break;
+            case 'interns': content = renderInternsPage(); break;
+            case 'tasks': content = renderTasksPage(); break;
+            case 'projects': content = renderProjectsPage(); break;
+            case 'teams': content = renderTeamsPage(); break;
+            case 'attendance': content = renderAttendancePage(); break;
+            case 'tickets': content = renderTicketsPage(); break;
+            default: content = renderAdminDashboard();
+          }
+        } else {
+          switch (currentPage) {
+            case 'dashboard': content = renderInternDashboard(); break;
+            case 'my-tasks': content = renderMyTasksPage(); break;
+            case 'my-projects': content = renderProjectsPage(); break;
+            case 'my-team': content = renderTeamsPage(); break;
+            case 'submit-ticket': content = renderSubmitTicketPage(); break;
+            default: content = renderInternDashboard();
+          }
+        }
+        
+        app.innerHTML = `
+          <div class="h-full w-full flex relative">
+            <div class="mobile-overlay" onclick="closeSidebar()"></div>
+            ${renderSidebar()}
+            <main class="flex-1 overflow-y-auto bg-slate-50 scrollbar-thin w-full">
+              ${renderMobileHeader()}
+              ${content}
+            </main>
+          </div>
+          ${renderModals()}
+        `;
+        
+        attachFormHandlers();
+      }
+    }
+
+    // Event Handlers
+    function attachLoginHandler() {
+      const form = document.getElementById('loginForm');
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = document.getElementById('loginEmail').value.trim();
+          const password = document.getElementById('loginPassword').value.trim();
+          const errorEl = document.getElementById('loginError');
+          
+          if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+            currentUser = { id: 'admin', name: 'Admin', email: ADMIN_EMAIL, role: 'admin' };
+            currentPage = 'dashboard';
+            render();
+            return;
+          }
+          
+          const intern = appData.interns.find(i => i.email === email && i.password === password);
+          if (intern) {
+            currentUser = { id: intern.id, name: intern.name, email: intern.email, role: intern.role, photoUrl: intern.photoUrl };
+            currentPage = 'dashboard';
+            render();
+            return;
+          }
+          
+          errorEl.textContent = 'Invalid email or password';
+          errorEl.classList.remove('hidden');
+        });
+      }
+    }
+
+    function attachFormHandlers() {
+      // Add Intern
+      const addInternForm = document.getElementById('addInternForm');
+      if (addInternForm) {
+        addInternForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById('addInternBtn');
+          btn.disabled = true;
+          btn.textContent = 'Adding...';
+          
+          const intern = {
+            type: 'intern',
+            id: generateId(),
+            name: document.getElementById('internName').value,
+            email: document.getElementById('internEmail').value,
+            password: document.getElementById('internPassword').value,
+            role: document.getElementById('internRole').value,
+            photoUrl: document.getElementById('internPhoto').value || '',
+            status: 'active',
+            isStarIntern: false
+          };
+          
+          const result = await createFirestoreDoc(intern);
+          if (result.success) {
+            closeModal('addIntern');
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Add Intern';
+          }
+        });
+      }
+
+      // Add Task
+      const addTaskForm = document.getElementById('addTaskForm');
+      if (addTaskForm) {
+        addTaskForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById('addTaskBtn');
+          btn.disabled = true;
+          btn.textContent = 'Creating...';
+          
+          const task = {
+            type: 'task',
+            id: generateId(),
+            title: document.getElementById('taskTitle').value,
+            description: document.getElementById('taskDescription').value,
+            deadline: document.getElementById('taskDeadline').value,
+            priority: document.getElementById('taskPriority').value,
+            assignedTo: document.getElementById('taskAssign').value,
+            taskStatus: 'open'
+          };
+          
+          const result = await createFirestoreDoc(task);
+          if (result.success) {
+            closeModal('addTask');
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Create';
+          }
+        });
+      }
+
+      // Add Project
+      const addProjectForm = document.getElementById('addProjectForm');
+      if (addProjectForm) {
+        addProjectForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById('addProjectBtn');
+          btn.disabled = true;
+          btn.textContent = 'Adding...';
+          
+          const project = {
+            type: 'project',
+            id: generateId(),
+            projectTitle: document.getElementById('projectTitle').value,
+            projectDescription: document.getElementById('projectDescription').value,
+            technologies: document.getElementById('projectTech').value,
+            projectStatus: document.getElementById('projectStatus').value,
+            startDate: new Date().toISOString().split('T')[0]
+          };
+          
+          const result = await createFirestoreDoc(project);
+          if (result.success) {
+            closeModal('addProject');
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Add';
+          }
+        });
+      }
+
+      // Add Team
+      const addTeamForm = document.getElementById('addTeamForm');
+      if (addTeamForm) {
+        addTeamForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById('addTeamBtn');
+          btn.disabled = true;
+          btn.textContent = 'Creating...';
+          
+          const checkboxes = document.querySelectorAll('.team-member-checkbox:checked');
+          const members = Array.from(checkboxes).map(cb => cb.value).join(',');
+          
+          const team = {
+            type: 'team',
+            id: generateId(),
+            teamName: document.getElementById('teamName').value,
+            teamDescription: document.getElementById('teamDescription').value,
+            members: members
+          };
+          
+          const result = await createFirestoreDoc(team);
+          if (result.success) {
+            closeModal('addTeam');
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Create';
+          }
+        });
+      }
+
+      // Attendance
+      const attendanceForm = document.getElementById('attendanceForm');
+      if (attendanceForm) {
+        attendanceForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById('attendanceBtn');
+          btn.disabled = true;
+          btn.textContent = 'Updating...';
+          
+          const datesInput = document.getElementById('attendanceDates').value;
+          const intern = appData.interns.find(i => i.id === selectedInternId);
+          
+          const attendance = {
+            type: 'attendance',
+            id: generateId(),
+            internId: selectedInternId,
+            internName: intern ? intern.name : '',
+            dates: datesInput
+          };
+          
+          const result = await createFirestoreDoc(attendance);
+          if (result.success) {
+            closeModal('attendance');
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Update';
+          }
+        });
+      }
+
+      // Submit Task
+      const submitTaskForm = document.getElementById('submitTaskForm');
+      if (submitTaskForm) {
+        submitTaskForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById('submitTaskBtn');
+          btn.disabled = true;
+          btn.textContent = 'Submitting...';
+          
+          const submission = {
+            type: 'submission',
+            id: generateId(),
+            taskId: selectedInternId,
+            submittedBy: currentUser.id,
+            submittedByName: currentUser.name,
+            submissionText: document.getElementById('submissionText').value,
+            submissionUrl: document.getElementById('submissionUrl').value,
+            submissionStatus: 'pending'
+          };
+          
+          const result = await createFirestoreDoc(submission);
+          if (result.success) {
+            closeModal('submitTask');
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Submit';
+          }
+        });
+      }
+
+      // Raise Ticket
+      const raiseTicketForm = document.getElementById('raiseTicketForm');
+      if (raiseTicketForm) {
+        raiseTicketForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById('raiseTicketBtn');
+          btn.disabled = true;
+          btn.textContent = 'Submitting...';
+          
+          const ticket = {
+            type: 'ticket',
+            id: generateId(),
+            message: document.getElementById('ticketMessage').value,
+            priority: document.getElementById('ticketPriority').value,
+            raisedBy: currentUser.id,
+            raisedByName: currentUser.name,
+            ticketStatus: 'open'
+          };
+          
+          const result = await createFirestoreDoc(ticket);
+          if (result.success) {
+            closeModal('raiseTicket');
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Submit';
+          }
+        });
+      }
+    }
+
+    // Star Intern Functions
+    window.setStarIntern = async function(internId) {
+      const currentStar = getStarIntern();
+      if (currentStar) {
+        currentStar.isStarIntern = false;
+        await updateFirestoreDoc(currentStar);
+      }
+      
+      const intern = appData.interns.find(i => i.id === internId);
+      if (intern) {
+        intern.isStarIntern = true;
+        intern.weekStartDate = new Date().toISOString().split('T')[0];
+        const result = await updateFirestoreDoc(intern);
+        if (result.success) {
+          triggerConfetti();
+        }
+      }
+    };
+
+    window.removeStarIntern = async function(internId) {
+      const intern = appData.interns.find(i => i.id === internId);
+      if (intern) {
+        intern.isStarIntern = false;
+        await updateFirestoreDoc(intern);
+      }
+    };
+
+    // Delete Functions
+    window.confirmDeleteIntern = function(internId) {
+      confirmDelete = internId;
+      render();
+    };
+
+    window.cancelDelete = function() {
+      confirmDelete = null;
+      render();
+    };
+
+    window.deleteIntern = async function(internId) {
+      const intern = appData.interns.find(i => i.id === internId);
+      if (intern) {
+        const result = await deleteFirestoreDoc(intern);
+        if (result.success) {
+          confirmDelete = null;
+          render();
+        }
+      }
+    };
+
+    // Resolve Ticket
+    window.resolveTicket = async function(ticketId) {
+      const ticket = appData.tickets.find(t => t.id === ticketId);
+      if (ticket) {
+        ticket.ticketStatus = 'resolved';
+        await updateFirestoreDoc(ticket);
+      }
+    };
+
+    // Modal Functions
+    window.openModal = function(modal) {
+      modals[modal] = true;
+      render();
+    };
+
+    window.closeModal = function(modal) {
+      modals[modal] = false;
+      selectedInternId = null;
+      render();
+    };
+
+    window.openAttendanceModal = function(internId) {
+      selectedInternId = internId;
+      modals.attendance = true;
+      render();
+    };
+
+    window.openSubmitTaskModal = function(taskId) {
+      selectedInternId = taskId;
+      modals.submitTask = true;
+      render();
+    };
+
+    // Navigation
+    window.navigateTo = function(page) {
+      currentPage = page;
+      closeSidebar();
+      render();
+    };
+
+    // Sidebar toggle
+    window.toggleSidebar = toggleSidebar;
+    window.closeSidebar = closeSidebar;
+
+    // Logout
+    window.logout = function() {
+      if (unsubscribeFirestore) {
+        unsubscribeFirestore();
+      }
+      currentUser = null;
+      currentPage = 'dashboard';
+      render();
+    };
+
+    // Toggle dark mode
+    window.toggleDarkMode = toggleDarkMode;
+
+    // Initialize
+    initApp();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bcb3f50b789c795',t:'MTc2ODIwNjE2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
