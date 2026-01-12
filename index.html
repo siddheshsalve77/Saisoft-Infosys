@@ -22,6 +22,7 @@
     
     .dark-mode .bg-white {
       background: #1e293b !important;
+      color: #e2e8f0 !important;
     }
     
     .dark-mode .bg-slate-50 {
@@ -48,6 +49,10 @@
       color: #64748b !important;
     }
     
+    .dark-mode .text-slate-700 {
+      color: #cbd5e1 !important;
+    }
+    
     .dark-mode .border-slate-200 {
       border-color: #334155 !important;
     }
@@ -66,6 +71,10 @@
     
     .dark-mode .glass-effect {
       background: rgba(30, 41, 59, 0.95) !important;
+    }
+    
+    .dark-mode .bg-gradient-to-br {
+      color: #e2e8f0 !important;
     }
     
     @keyframes confetti-fall {
@@ -475,7 +484,7 @@
    <div class="loading-spinner"></div>
   </div>
   <script>
-    // �� FIREBASE CONFIGURATION - Your Sai Soft Infosys Project
+    // ��� FIREBASE CONFIGURATION - Your Sai Soft Infosys Project
     const firebaseConfig = {
       apiKey: "AIzaSyCkO6JDCmU66zAJwO1kJ2yVOPdYAzvSm5o",
       authDomain: "sai-soft-infosys-fc440.firebaseapp.com",
@@ -515,10 +524,11 @@
       teams: [],
       meetings: [],
       settings: [],
-      messages: []
+      messages: [],
+      teamMessages: []
     };
-    let currentUser = null;
-    let currentPage = 'dashboard';
+    let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    let currentPage = localStorage.getItem('currentPage') || 'dashboard';
     let darkMode = localStorage.getItem('darkMode') === 'true';
     let modals = {};
     let selectedInternId = null;
@@ -527,6 +537,7 @@
     let unsubscribeFirestore = null;
     let sidebarOpen = false;
     let editingIntern = null;
+    let selectedTeamId = null;
 
     // Admin credentials
     const ADMIN_EMAIL = 'admin@saisoft';
@@ -707,6 +718,7 @@
         appData.meetings = allData.filter(d => d.type === 'meeting');
         appData.settings = allData.filter(d => d.type === 'settings');
         appData.messages = allData.filter(d => d.type === 'message');
+        appData.teamMessages = allData.filter(d => d.type === 'teamMessage');
 
         // Auto-scroll messages to bottom if on intern space page
         if (currentPage === 'intern-space') {
@@ -896,7 +908,7 @@
               </form>
               
               <p class="text-center text-slate-400 text-xs md:text-sm mt-4 md:mt-6">
-                🔥 Real-Time Sync Enabled • Secure Access
+                🔥 Real-Time Sync Enabled �� Secure Access
               </p>
             </div>
           </div>
@@ -1014,7 +1026,7 @@
           ${renderStarInternBanner()}
           
           <div class="mb-6 md:mb-8">
-            <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Welcome back, Admin! 👋</h1>
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Welcome back, Admin! ��</h1>
             <p class="text-sm md:text-base text-slate-500 mt-1">${dateInfo.dayName}, ${dateInfo.month} ${dateInfo.day}, ${dateInfo.year}</p>
           </div>
           
@@ -1055,58 +1067,242 @@
       const myTickets = appData.tickets.filter(t => t.raisedBy === currentUser.id);
       const attendanceStats = getAttendanceStats(currentUser.id);
       
+      // Motivational quotes
+      const quotes = [
+        { text: "Code is like humor. When you have to explain it, it's bad.", author: "Cory House" },
+        { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
+        { text: "Learning to code is learning to create and innovate.", author: "Codecademy" },
+        { text: "The best error message is the one that never shows up.", author: "Thomas Fuchs" },
+        { text: "Every expert was once a beginner.", author: "Helen Hayes" },
+        { text: "Code never lies, comments sometimes do.", author: "Ron Jeffries" },
+        { text: "Make it work, make it right, make it fast.", author: "Kent Beck" },
+        { text: "Programs must be written for people to read.", author: "Harold Abelson" },
+        { text: "The only way to learn a new language is by writing programs in it.", author: "Dennis Ritchie" },
+        { text: "Simplicity is the soul of efficiency.", author: "Austin Freeman" }
+      ];
+      
+      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      
+      // Get last 7 days attendance
+      const last7Days = [];
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        const status = attendanceStats.byDate[dateStr] || 'none';
+        last7Days.push({
+          day: date.toLocaleDateString('en-US', { weekday: 'short' }),
+          date: date.getDate(),
+          status: status
+        });
+      }
+      
+      // Calculate attendance percentage
+      const attendancePercentage = attendanceStats.total > 0 
+        ? Math.round((attendanceStats.present / attendanceStats.total) * 100) 
+        : 0;
+      
       return `
         <div class="p-4 md:p-8">
           ${renderStarInternBanner()}
           
-          <div class="mb-6 md:mb-8">
-            <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Welcome back, ${currentUser.name}! 🎉</h1>
-            <p class="text-sm md:text-base text-slate-500 mt-1">${dateInfo.dayName}, ${dateInfo.month} ${dateInfo.day}, ${dateInfo.year}</p>
+          <!-- Energetic Header with Quote -->
+          <div class="mb-6 md:mb-8 relative overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-3xl p-6 md:p-8 text-white shadow-2xl relative">
+              <div class="absolute inset-0 opacity-20">
+                <div class="absolute top-0 left-0 w-64 h-64 bg-white rounded-full blur-3xl animate-pulse"></div>
+                <div class="absolute bottom-0 right-0 w-96 h-96 bg-yellow-300 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+              </div>
+              
+              <div class="relative">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-12 h-12 md:w-16 md:h-16 rounded-full overflow-hidden border-4 border-white shadow-lg ring-4 ring-white/30">
+                    ${getAvatar(currentUser.name, currentUser.photoUrl)}
+                  </div>
+                  <div class="flex-1">
+                    <h1 class="text-2xl md:text-4xl font-black mb-1 drop-shadow-lg">Welcome back, ${currentUser.name}! 🎉</h1>
+                    <p class="text-sm md:text-lg text-white/90 font-medium">${dateInfo.dayName}, ${dateInfo.month} ${dateInfo.day}, ${dateInfo.year}</p>
+                  </div>
+                </div>
+                
+                <!-- Inspirational Quote -->
+                <div class="mt-6 bg-white/10 backdrop-blur-md rounded-2xl p-4 md:p-6 border-2 border-white/20">
+                  <div class="flex items-start gap-3">
+                    <svg class="w-8 h-8 md:w-12 md:h-12 text-yellow-300 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                    </svg>
+                    <div class="flex-1">
+                      <p class="text-base md:text-xl font-semibold mb-2 leading-relaxed">"${randomQuote.text}"</p>
+                      <p class="text-sm md:text-base text-white/80 font-medium">— ${randomQuote.author}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-            <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
-              <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
-                <div class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+          <!-- Stats Cards with Animations -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8">
+            <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl p-4 md:p-6 text-white card-hover shadow-xl transform hover:scale-105 transition-all duration-300">
+              <div class="flex items-center gap-2 md:gap-3 mb-3">
+                <div class="w-12 h-12 md:w-14 md:h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
                   ${icons.clipboard}
                 </div>
-                <h3 class="font-semibold text-slate-800 text-xs md:text-sm">My Tasks</h3>
+                <h3 class="font-bold text-xs md:text-sm">My Tasks</h3>
               </div>
-              <p class="text-2xl md:text-3xl font-bold text-slate-800">${myTasks.length}</p>
-              <p class="text-xs md:text-sm text-slate-500 mt-1">Assigned to you</p>
+              <p class="text-3xl md:text-4xl font-black mb-1">${myTasks.length}</p>
+              <p class="text-xs md:text-sm text-blue-100">Assigned to you</p>
             </div>
             
-            <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
-              <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
-                <div class="w-8 h-8 md:w-10 md:h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
+            <div class="bg-gradient-to-br from-green-500 to-emerald-700 rounded-2xl p-4 md:p-6 text-white card-hover shadow-xl transform hover:scale-105 transition-all duration-300">
+              <div class="flex items-center gap-2 md:gap-3 mb-3">
+                <div class="w-12 h-12 md:w-14 md:h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
                   ${icons.checkCircle}
                 </div>
-                <h3 class="font-semibold text-slate-800 text-xs md:text-sm">Submissions</h3>
+                <h3 class="font-bold text-xs md:text-sm">Submissions</h3>
               </div>
-              <p class="text-2xl md:text-3xl font-bold text-slate-800">${mySubmissions.length}</p>
-              <p class="text-xs md:text-sm text-slate-500 mt-1">Tasks submitted</p>
+              <p class="text-3xl md:text-4xl font-black mb-1">${mySubmissions.length}</p>
+              <p class="text-xs md:text-sm text-green-100">Tasks submitted</p>
             </div>
             
-            <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
-              <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
-                <div class="w-8 h-8 md:w-10 md:h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600">
+            <div class="bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl p-4 md:p-6 text-white card-hover shadow-xl transform hover:scale-105 transition-all duration-300">
+              <div class="flex items-center gap-2 md:gap-3 mb-3">
+                <div class="w-12 h-12 md:w-14 md:h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
                   ${icons.calendar}
                 </div>
-                <h3 class="font-semibold text-slate-800 text-xs md:text-sm">Attendance</h3>
+                <h3 class="font-bold text-xs md:text-sm">Attendance</h3>
               </div>
-              <p class="text-2xl md:text-3xl font-bold text-slate-800">${attendanceStats.totalDays}</p>
-              <p class="text-xs md:text-sm text-slate-500 mt-1">Days present</p>
+              <p class="text-3xl md:text-4xl font-black mb-1">${attendanceStats.present}</p>
+              <p class="text-xs md:text-sm text-purple-100">Days present</p>
             </div>
             
-            <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
-              <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
-                <div class="w-8 h-8 md:w-10 md:h-10 bg-orange-100 rounded-lg flex items-center justify-center text-orange-600">
+            <div class="bg-gradient-to-br from-orange-500 to-red-700 rounded-2xl p-4 md:p-6 text-white card-hover shadow-xl transform hover:scale-105 transition-all duration-300">
+              <div class="flex items-center gap-2 md:gap-3 mb-3">
+                <div class="w-12 h-12 md:w-14 md:h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
                   ${icons.ticket}
                 </div>
-                <h3 class="font-semibold text-slate-800 text-xs md:text-sm">Support</h3>
+                <h3 class="font-bold text-xs md:text-sm">Support</h3>
               </div>
-              <p class="text-2xl md:text-3xl font-bold text-slate-800">${myTickets.length}</p>
-              <p class="text-xs md:text-sm text-slate-500 mt-1">Tickets raised</p>
+              <p class="text-3xl md:text-4xl font-black mb-1">${myTickets.length}</p>
+              <p class="text-xs md:text-sm text-orange-100">Tickets raised</p>
+            </div>
+          </div>
+          
+          <!-- Beautiful Attendance Section -->
+          <div class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-3xl p-1 mb-8 shadow-2xl">
+            <div class="bg-white rounded-3xl p-6 md:p-8">
+              <div class="flex items-center justify-between mb-6">
+                <div>
+                  <h2 class="text-xl md:text-2xl font-bold text-slate-800 mb-2">📊 My Attendance Overview</h2>
+                  <p class="text-slate-600 text-sm">Track your presence and engagement</p>
+                </div>
+                <button onclick="openAttendanceModal('${currentUser.id}')" 
+                  class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg text-sm font-medium">
+                  View Full Calendar
+                </button>
+              </div>
+              
+              <!-- Attendance Stats Grid -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-4 border-2 border-green-200">
+                  <div class="flex items-center gap-2 mb-2">
+                    <div class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center shadow-md">
+                      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                      </svg>
+                    </div>
+                    <span class="text-xs font-semibold text-green-700">PRESENT</span>
+                  </div>
+                  <p class="text-3xl font-bold text-green-700">${attendanceStats.present}</p>
+                  <p class="text-xs text-green-600 mt-1">Days</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-4 border-2 border-amber-200">
+                  <div class="flex items-center gap-2 mb-2">
+                    <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center shadow-md">
+                      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                      </svg>
+                    </div>
+                    <span class="text-xs font-semibold text-amber-700">WFH</span>
+                  </div>
+                  <p class="text-3xl font-bold text-amber-700">${attendanceStats.wfh}</p>
+                  <p class="text-xs text-amber-600 mt-1">Days</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl p-4 border-2 border-red-200">
+                  <div class="flex items-center gap-2 mb-2">
+                    <div class="w-10 h-10 bg-red-500 rounded-xl flex items-center justify-center shadow-md">
+                      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                      </svg>
+                    </div>
+                    <span class="text-xs font-semibold text-red-700">ABSENT</span>
+                  </div>
+                  <p class="text-3xl font-bold text-red-700">${attendanceStats.absent}</p>
+                  <p class="text-xs text-red-600 mt-1">Days</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-4 border-2 border-blue-200">
+                  <div class="flex items-center gap-2 mb-2">
+                    <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center shadow-md">
+                      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                    </div>
+                    <span class="text-xs font-semibold text-blue-700">LEAVE</span>
+                  </div>
+                  <p class="text-3xl font-bold text-blue-700">${attendanceStats.leave}</p>
+                  <p class="text-xs text-blue-600 mt-1">Days</p>
+                </div>
+              </div>
+              
+              <!-- Last 7 Days Timeline -->
+              <div class="bg-gradient-to-r from-slate-50 to-indigo-50 rounded-2xl p-6 border border-slate-200">
+                <h3 class="font-bold text-slate-800 mb-4 text-sm">Last 7 Days Activity</h3>
+                <div class="grid grid-cols-7 gap-2">
+                  ${last7Days.map(day => {
+                    let bgClass = 'bg-slate-200';
+                    let iconHtml = '';
+                    
+                    if (day.status === 'present') {
+                      bgClass = 'bg-gradient-to-br from-green-400 to-green-600';
+                      iconHtml = '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                    } else if (day.status === 'wfh') {
+                      bgClass = 'bg-gradient-to-br from-amber-400 to-amber-600';
+                      iconHtml = '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>';
+                    } else if (day.status === 'absent') {
+                      bgClass = 'bg-gradient-to-br from-red-400 to-red-600';
+                      iconHtml = '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
+                    } else if (day.status === 'leave') {
+                      bgClass = 'bg-gradient-to-br from-blue-400 to-blue-600';
+                      iconHtml = '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+                    }
+                    
+                    return `
+                      <div class="text-center">
+                        <p class="text-xs font-medium text-slate-600 mb-2">${day.day}</p>
+                        <div class="${bgClass} rounded-xl p-3 flex flex-col items-center justify-center shadow-md transition-transform hover:scale-105">
+                          ${iconHtml}
+                          <p class="${day.status !== 'none' ? 'text-white' : 'text-slate-500'} text-sm font-bold mt-1">${day.date}</p>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+              
+              <!-- Attendance Progress Bar -->
+              <div class="mt-6">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-sm font-semibold text-slate-700">Attendance Rate</span>
+                  <span class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">${attendancePercentage}%</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-4 overflow-hidden shadow-inner">
+                  <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-full rounded-full transition-all duration-500 shadow-lg" 
+                       style="width: ${attendancePercentage}%"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1408,46 +1604,144 @@
 
     // Teams Page
     function renderTeamsPage() {
+      const isAdmin = currentUser.role === 'admin';
+      
       return `
         <div class="p-4 md:p-8">
           <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
             <div>
-              <h1 class="text-xl md:text-2xl font-bold text-slate-800">Team Management</h1>
-              <p class="text-sm md:text-base text-slate-500">Organize interns into teams</p>
+              <h1 class="text-xl md:text-2xl font-bold text-slate-800">Team Management 👥</h1>
+              <p class="text-sm md:text-base text-slate-500">${isAdmin ? 'Organize and manage teams' : 'Collaborate with your team'}</p>
             </div>
-            <button onclick="openModal('addTeam')" 
-              class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
-              ${icons.plus}
-              <span>Create Team</span>
-            </button>
+            ${isAdmin ? `
+              <button onclick="openModal('addTeam')" 
+                class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-colors text-sm shadow-md hover:shadow-lg">
+                ${icons.plus}
+                <span>Create Team</span>
+              </button>
+            ` : ''}
           </div>
           
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
             ${appData.teams.length > 0 ? appData.teams.map(team => {
               const memberIds = team.members ? team.members.split(',') : [];
               const members = appData.interns.filter(i => memberIds.includes(i.id));
+              const teamTasks = appData.tasks.filter(t => t.teamId === team.id);
+              const isMember = memberIds.includes(currentUser.id) || isAdmin;
+              
+              // Get team messages count
+              const teamMessagesCount = appData.teamMessages.filter(m => m.teamId === team.id).length;
+              
               return `
-                <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
-                  <h3 class="font-bold text-slate-800 mb-2 text-sm md:text-base">${team.teamName}</h3>
-                  <p class="text-slate-600 text-xs md:text-sm mb-4 line-clamp-2">${team.teamDescription}</p>
-                  <div class="flex items-center gap-2 mb-4">
-                    ${members.slice(0, 5).map(m => `
-                      <div class="w-8 h-8 rounded-full overflow-hidden" title="${m.name}">
-                        ${getAvatar(m.name, m.photoUrl)}
+                <div class="bg-gradient-to-br from-white to-slate-50 rounded-2xl border-2 border-slate-200 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                  <!-- Team Header -->
+                  <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-6 text-white relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+                    <div class="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
+                    <div class="relative">
+                      <div class="flex items-center justify-between mb-3">
+                        <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-lg">
+                          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                          </svg>
+                        </div>
+                        ${isMember ? `
+                          <span class="px-3 py-1 bg-green-500/80 backdrop-blur-sm rounded-full text-xs font-bold shadow-md">
+                            ✓ MEMBER
+                          </span>
+                        ` : ''}
                       </div>
-                    `).join('')}
-                    ${members.length > 5 ? `
-                      <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-xs text-slate-600">
-                        +${members.length - 5}
-                      </div>
-                    ` : ''}
+                      <h3 class="text-xl font-bold mb-1">${team.teamName}</h3>
+                      <p class="text-blue-100 text-sm line-clamp-2">${team.teamDescription}</p>
+                    </div>
                   </div>
-                  <p class="text-xs md:text-sm text-slate-500">${members.length} members</p>
+                  
+                  <!-- Team Content -->
+                  <div class="p-6">
+                    <!-- Team Members -->
+                    <div class="mb-4">
+                      <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Team Members (${members.length})</p>
+                      <div class="flex items-center gap-2 mb-3">
+                        ${members.slice(0, 6).map(m => `
+                          <div class="w-10 h-10 rounded-full overflow-hidden ring-2 ring-white shadow-md hover:scale-110 transition-transform" title="${m.name}">
+                            ${getAvatar(m.name, m.photoUrl)}
+                          </div>
+                        `).join('')}
+                        ${members.length > 6 ? `
+                          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center text-white font-bold text-xs shadow-md">
+                            +${members.length - 6}
+                          </div>
+                        ` : ''}
+                      </div>
+                    </div>
+                    
+                    <!-- Team Stats -->
+                    <div class="grid grid-cols-3 gap-3 mb-4">
+                      <div class="bg-blue-50 rounded-xl p-3 text-center border border-blue-100">
+                        <svg class="w-5 h-5 text-blue-600 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        <p class="text-lg font-bold text-blue-700">${teamTasks.length}</p>
+                        <p class="text-xs text-blue-600">Tasks</p>
+                      </div>
+                      
+                      <div class="bg-purple-50 rounded-xl p-3 text-center border border-purple-100">
+                        <svg class="w-5 h-5 text-purple-600 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
+                        </svg>
+                        <p class="text-lg font-bold text-purple-700">${teamMessagesCount}</p>
+                        <p class="text-xs text-purple-600">Messages</p>
+                      </div>
+                      
+                      <div class="bg-green-50 rounded-xl p-3 text-center border border-green-100">
+                        <svg class="w-5 h-5 text-green-600 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        <p class="text-lg font-bold text-green-700">${members.length}</p>
+                        <p class="text-xs text-green-600">Members</p>
+                      </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 gap-2">
+                      <button onclick="openTeamModal('${team.id}'); event.stopPropagation();" 
+                        class="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg font-medium text-sm flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                        <span>Open Team Hub</span>
+                      </button>
+                      ${isAdmin ? `
+                        <div class="grid grid-cols-2 gap-2">
+                          <button onclick="openEditTeamModal('${team.id}'); event.stopPropagation();" 
+                            class="py-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200 transition-all font-medium text-sm flex items-center justify-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                            <span>Edit</span>
+                          </button>
+                          <button onclick="confirmDeleteTeam('${team.id}'); event.stopPropagation();" 
+                            class="py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-all font-medium text-sm flex items-center justify-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                            <span>Delete</span>
+                          </button>
+                        </div>
+                      ` : ''}
+                    </div>
+                  </div>
                 </div>
               `;
             }).join('') : `
-              <div class="col-span-full bg-white rounded-xl p-8 md:p-12 border border-slate-200 text-center text-slate-400">
-                <p class="text-sm md:text-base">No teams yet. Click "Create Team" to add one.</p>
+              <div class="col-span-full bg-gradient-to-br from-slate-50 to-blue-50 rounded-3xl p-12 md:p-16 border-2 border-dashed border-slate-300 text-center">
+                <svg class="w-20 h-20 md:w-24 md:h-24 mx-auto mb-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <h3 class="text-xl md:text-2xl font-bold text-slate-400 mb-3">No Teams Yet</h3>
+                <p class="text-sm md:text-base text-slate-500 max-w-md mx-auto">
+                  ${isAdmin ? 'Click "Create Team" to organize your interns into collaborative groups' : 'No teams have been created yet. Contact your admin to join a team!'}
+                </p>
               </div>
             `}
           </div>
@@ -2084,6 +2378,58 @@
         `;
       }
 
+      // Edit Team Modal
+      if (modals.editTeam && editingIntern) {
+        const team = editingIntern;
+        const currentMembers = team.members ? team.members.split(',') : [];
+        
+        html += `
+          <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+              <div class="sticky top-0 bg-white flex items-center justify-between p-4 md:p-6 border-b border-slate-200">
+                <h3 class="text-base md:text-lg font-bold text-slate-800">Edit Team</h3>
+                <button onclick="closeModal('editTeam')" class="text-slate-400 hover:text-slate-600">
+                  ${icons.x}
+                </button>
+              </div>
+              <form id="editTeamForm" class="p-4 md:p-6 space-y-4">
+                <div>
+                  <label for="editTeamName" class="block text-sm font-medium text-slate-700 mb-2">Team Name</label>
+                  <input type="text" id="editTeamName" value="${team.teamName}" required 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                </div>
+                <div>
+                  <label for="editTeamDescription" class="block text-sm font-medium text-slate-700 mb-2">Description</label>
+                  <textarea id="editTeamDescription" rows="2" required 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">${team.teamDescription}</textarea>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-2">Select Members</label>
+                  <div class="max-h-48 overflow-y-auto border border-slate-200 rounded-lg p-3 space-y-2">
+                    ${appData.interns.map(intern => `
+                      <label class="flex items-center gap-2 cursor-pointer hover:bg-slate-50 p-2 rounded">
+                        <input type="checkbox" value="${intern.id}" class="edit-team-member-checkbox w-4 h-4" ${currentMembers.includes(intern.id) ? 'checked' : ''}>
+                        <span class="text-sm text-slate-700">${intern.name}</span>
+                      </label>
+                    `).join('')}
+                  </div>
+                </div>
+                <div class="flex gap-3 pt-4">
+                  <button type="button" onclick="closeModal('editTeam')" 
+                    class="flex-1 px-4 py-3 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm md:text-base">
+                    Cancel
+                  </button>
+                  <button type="submit" id="editTeamBtn"
+                    class="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm md:text-base">
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        `;
+      }
+
       // Attendance Modal
       if (modals.attendance) {
         const intern = appData.interns.find(i => i.id === selectedInternId);
@@ -2488,28 +2834,519 @@
         `;
       }
 
-      // Delete Confirmation
-      if (confirmDelete) {
-        const intern = appData.interns.find(i => i.id === confirmDelete);
-        if (intern) {
+      // Team Hub Modal
+      if (modals.teamHub && selectedTeamId) {
+        const team = appData.teams.find(t => t.id === selectedTeamId);
+        if (team) {
+          const memberIds = team.members ? team.members.split(',') : [];
+          const members = appData.interns.filter(i => memberIds.includes(i.id));
+          const teamTasks = appData.tasks.filter(t => t.teamId === team.id);
+          const isAdmin = currentUser.role === 'admin';
+          const isMember = memberIds.includes(currentUser.id) || isAdmin;
+          
+          // Get team messages
+          const teamMessages = appData.teamMessages.filter(m => m.teamId === team.id).sort((a, b) => {
+            const timeA = a.createdAt ? (a.createdAt.seconds || 0) : 0;
+            const timeB = b.createdAt ? (b.createdAt.seconds || 0) : 0;
+            return timeA - timeB;
+          });
+          
+          // Get team meetings
+          const teamMeetings = appData.meetings.filter(m => m.teamId === team.id).sort((a, b) => {
+            return new Date(b.meetingDate) - new Date(a.meetingDate);
+          });
+          
+          // Calculate team stats
+          const completedTasks = teamTasks.filter(t => t.taskStatus === 'completed').length;
+          const totalSubmissions = appData.submissions.filter(s => 
+            teamTasks.some(t => t.id === s.taskId)
+          ).length;
+          
           html += `
-            <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
-              <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-4 md:p-6">
-                <h3 class="text-base md:text-lg font-bold text-slate-800 mb-4">Confirm Delete</h3>
-                <p class="text-sm md:text-base text-slate-600 mb-6">Are you sure you want to delete <strong>${intern.name}</strong>? This action cannot be undone.</p>
-                <div class="flex gap-3">
-                  <button onclick="cancelDelete()" 
-                    class="flex-1 px-4 py-3 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm md:text-base">
-                    Cancel
-                  </button>
-                  <button onclick="deleteIntern('${confirmDelete}')" 
-                    class="flex-1 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm md:text-base">
-                    Delete
-                  </button>
+            <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-[200] p-4">
+              <div class="bg-white rounded-3xl shadow-2xl w-full max-w-7xl max-h-[95vh] overflow-hidden flex flex-col">
+                <!-- Team Hub Header -->
+                <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-6 text-white relative overflow-hidden">
+                  <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
+                  <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -ml-24 -mb-24"></div>
+                  
+                  <div class="relative flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                      <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-lg">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <h2 class="text-3xl font-bold mb-1">${team.teamName}</h2>
+                        <p class="text-blue-100">${team.teamDescription}</p>
+                      </div>
+                    </div>
+                    <button onclick="closeModal('teamHub')" 
+                      class="w-12 h-12 rounded-full bg-white/20 hover:bg-white/30 transition-all flex items-center justify-center backdrop-blur-sm">
+                      ${icons.x}
+                    </button>
+                  </div>
+                  
+                  <!-- Quick Stats -->
+                  <div class="grid grid-cols-4 gap-3 mt-6">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 text-center">
+                      <div class="text-2xl font-bold">${members.length}</div>
+                      <div class="text-xs text-blue-100">Members</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 text-center">
+                      <div class="text-2xl font-bold">${teamTasks.length}</div>
+                      <div class="text-xs text-blue-100">Tasks</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 text-center">
+                      <div class="text-2xl font-bold">${completedTasks}</div>
+                      <div class="text-xs text-blue-100">Completed</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 text-center">
+                      <div class="text-2xl font-bold">${teamMessages.length}</div>
+                      <div class="text-xs text-blue-100">Messages</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Tabs Navigation -->
+                <div class="border-b border-slate-200 bg-white px-6">
+                  <div class="flex gap-1 overflow-x-auto scrollbar-thin">
+                    <button onclick="switchTeamTab('overview')" id="teamTab-overview"
+                      class="team-tab px-4 py-3 font-semibold text-sm border-b-2 border-blue-600 text-blue-600">
+                      📊 Overview
+                    </button>
+                    <button onclick="switchTeamTab('chat')" id="teamTab-chat"
+                      class="team-tab px-4 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-600 hover:text-slate-900">
+                      💬 Team Chat
+                    </button>
+                    <button onclick="switchTeamTab('tasks')" id="teamTab-tasks"
+                      class="team-tab px-4 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-600 hover:text-slate-900">
+                      📋 Tasks
+                    </button>
+                    <button onclick="switchTeamTab('members')" id="teamTab-members"
+                      class="team-tab px-4 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-600 hover:text-slate-900">
+                      👥 Members
+                    </button>
+                    <button onclick="switchTeamTab('meetings')" id="teamTab-meetings"
+                      class="team-tab px-4 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-600 hover:text-slate-900">
+                      📅 Meetings
+                    </button>
+                    <button onclick="switchTeamTab('files')" id="teamTab-files"
+                      class="team-tab px-4 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-600 hover:text-slate-900">
+                      📁 Resources
+                    </button>
+                  </div>
+                </div>
+                
+                <!-- Tab Content -->
+                <div class="flex-1 overflow-y-auto p-6 scrollbar-thin">
+                  <!-- Overview Tab -->
+                  <div id="teamContent-overview" class="team-content">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <!-- Team Members Card -->
+                      <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-200">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                          </svg>
+                          Team Members (${members.length})
+                        </h3>
+                        <div class="space-y-3">
+                          ${members.slice(0, 5).map(m => `
+                            <div class="flex items-center gap-3 p-3 bg-white rounded-xl hover:shadow-md transition-all">
+                              <div class="w-12 h-12 rounded-full overflow-hidden ring-2 ring-blue-200">
+                                ${getAvatar(m.name, m.photoUrl)}
+                              </div>
+                              <div class="flex-1">
+                                <p class="font-semibold text-slate-800">${m.name}</p>
+                                <p class="text-xs text-slate-500">${m.role || 'Intern'}</p>
+                              </div>
+                              <div class="w-3 h-3 bg-green-500 rounded-full" title="Online"></div>
+                            </div>
+                          `).join('')}
+                          ${members.length > 5 ? `
+                            <button onclick="switchTeamTab('members')" class="w-full py-2 text-blue-600 hover:text-blue-700 font-medium text-sm">
+                              View all ${members.length} members →
+                            </button>
+                          ` : ''}
+                        </div>
+                      </div>
+                      
+                      <!-- Task Progress Card -->
+                      <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border-2 border-purple-200">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                          <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                          </svg>
+                          Task Progress
+                        </h3>
+                        <div class="space-y-4">
+                          <div>
+                            <div class="flex items-center justify-between mb-2">
+                              <span class="text-sm font-medium text-slate-700">Completion Rate</span>
+                              <span class="text-2xl font-bold text-purple-600">${teamTasks.length > 0 ? Math.round((completedTasks / teamTasks.length) * 100) : 0}%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                              <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-full rounded-full transition-all duration-500" 
+                                   style="width: ${teamTasks.length > 0 ? (completedTasks / teamTasks.length) * 100 : 0}%"></div>
+                            </div>
+                          </div>
+                          
+                          <div class="grid grid-cols-2 gap-3 mt-4">
+                            <div class="bg-white rounded-xl p-4 text-center">
+                              <div class="text-3xl font-bold text-green-600">${completedTasks}</div>
+                              <div class="text-xs text-slate-600 mt-1">Completed</div>
+                            </div>
+                            <div class="bg-white rounded-xl p-4 text-center">
+                              <div class="text-3xl font-bold text-orange-600">${teamTasks.length - completedTasks}</div>
+                              <div class="text-xs text-slate-600 mt-1">In Progress</div>
+                            </div>
+                          </div>
+                          
+                          <button onclick="switchTeamTab('tasks')" class="w-full mt-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 font-medium text-sm">
+                            View All Tasks →
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <!-- Recent Activity -->
+                      <div class="lg:col-span-2 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border-2 border-green-200">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                          </svg>
+                          Recent Team Activity
+                        </h3>
+                        <div class="space-y-3">
+                          ${teamMessages.slice(-5).reverse().map(msg => {
+                            const sender = appData.interns.find(i => i.id === msg.senderId) || { name: msg.senderName };
+                            const timeStr = msg.createdAt ? new Date(msg.createdAt.seconds * 1000).toLocaleString() : 'Just now';
+                            return `
+                              <div class="flex items-start gap-3 p-3 bg-white rounded-xl">
+                                <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                                  ${getAvatar(sender.name, sender.photoUrl)}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                  <div class="flex items-center gap-2 mb-1">
+                                    <span class="font-semibold text-slate-800 text-sm">${sender.name}</span>
+                                    <span class="text-xs text-slate-400">${timeStr}</span>
+                                  </div>
+                                  <p class="text-sm text-slate-600 line-clamp-2">${msg.message}</p>
+                                </div>
+                              </div>
+                            `;
+                          }).join('')}
+                          ${teamMessages.length === 0 ? `
+                            <div class="text-center py-8 text-slate-400">
+                              <p class="text-sm">No activity yet. Start a conversation!</p>
+                            </div>
+                          ` : ''}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Chat Tab -->
+                  <div id="teamContent-chat" class="team-content hidden">
+                    <div class="bg-white rounded-2xl border-2 border-slate-200 h-[600px] flex flex-col">
+                      <div class="flex-1 overflow-y-auto p-6 space-y-3 scrollbar-thin" id="teamMessagesContainer">
+                        ${teamMessages.length > 0 ? teamMessages.map(msg => {
+                          const isSentByMe = msg.senderId === currentUser.id;
+                          const sender = appData.interns.find(i => i.id === msg.senderId) || { name: msg.senderName, photoUrl: '' };
+                          const timeStr = msg.createdAt ? new Date(msg.createdAt.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Now';
+                          
+                          return `
+                            <div class="flex ${isSentByMe ? 'justify-end' : 'justify-start'} items-end gap-2">
+                              ${!isSentByMe ? `
+                                <div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                                  ${getAvatar(sender.name, sender.photoUrl)}
+                                </div>
+                              ` : ''}
+                              <div class="flex flex-col ${isSentByMe ? 'items-end' : 'items-start'} max-w-[75%]">
+                                ${!isSentByMe ? `<p class="text-xs text-slate-500 mb-1 px-1">${sender.name}</p>` : ''}
+                                <div class="message-bubble ${isSentByMe ? 'sent' : 'received'} px-4 py-2">
+                                  <p class="${isSentByMe ? 'text-white' : 'text-slate-800'} text-sm">${msg.message}</p>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-1 px-1">${timeStr}</p>
+                              </div>
+                              ${isSentByMe ? `
+                                <div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                                  ${getAvatar(currentUser.name, currentUser.photoUrl)}
+                                </div>
+                              ` : ''}
+                            </div>
+                          `;
+                        }).join('') : `
+                          <div class="h-full flex items-center justify-center text-slate-400">
+                            <div class="text-center">
+                              <svg class="w-16 h-16 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                              </svg>
+                              <p>No team messages yet</p>
+                              <p class="text-sm mt-1">Start the conversation!</p>
+                            </div>
+                          </div>
+                        `}
+                      </div>
+                      
+                      ${isMember ? `
+                        <div class="border-t border-slate-200 p-4">
+                          <form id="sendTeamMessageForm" class="flex gap-2">
+                            <input type="text" id="teamMessageInput" placeholder="Type your message..." required
+                              class="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500">
+                            <button type="submit" id="sendTeamMessageBtn"
+                              class="px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
+                              ${icons.send}
+                            </button>
+                          </form>
+                        </div>
+                      ` : ''}
+                    </div>
+                  </div>
+                  
+                  <!-- Tasks Tab -->
+                  <div id="teamContent-tasks" class="team-content hidden">
+                    ${isAdmin ? `
+                      <div class="mb-6">
+                        <button onclick="openCreateTeamTaskModal('${team.id}')" 
+                          class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                          ${icons.plus}
+                          <span>Create Team Task</span>
+                        </button>
+                      </div>
+                    ` : ''}
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                      ${teamTasks.length > 0 ? teamTasks.map(task => {
+                        const submissions = appData.submissions.filter(s => s.taskId === task.id);
+                        return `
+                          <div class="bg-white rounded-xl p-5 border-2 border-slate-200 hover:border-blue-300 transition-all">
+                            <div class="flex items-start justify-between mb-3">
+                              <h4 class="font-bold text-slate-800 flex-1">${task.title}</h4>
+                              <span class="px-2 py-1 text-xs font-medium rounded ${
+                                task.priority === 'high' ? 'bg-red-100 text-red-700' :
+                                task.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                                'bg-green-100 text-green-700'
+                              }">${task.priority || 'low'}</span>
+                            </div>
+                            <p class="text-sm text-slate-600 mb-4 line-clamp-2">${task.description}</p>
+                            <div class="flex items-center justify-between text-sm">
+                              <span class="text-slate-500">Due: ${new Date(task.deadline).toLocaleDateString()}</span>
+                              <span class="text-blue-600 font-medium">${submissions.length} submissions</span>
+                            </div>
+                          </div>
+                        `;
+                      }).join('') : `
+                        <div class="lg:col-span-2 text-center py-12 text-slate-400">
+                          <svg class="w-16 h-16 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                          </svg>
+                          <p>No team tasks yet</p>
+                        </div>
+                      `}
+                    </div>
+                  </div>
+                  
+                  <!-- Members Tab -->
+                  <div id="teamContent-members" class="team-content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      ${members.map(m => {
+                        const memberTasks = teamTasks.filter(t => t.assignedTo === m.id);
+                        const memberSubmissions = appData.submissions.filter(s => s.submittedBy === m.id);
+                        return `
+                          <div class="bg-gradient-to-br from-white to-blue-50 rounded-xl p-5 border-2 border-blue-200 hover:shadow-lg transition-all">
+                            <div class="flex items-center gap-4 mb-4">
+                              <div class="w-16 h-16 rounded-full overflow-hidden ring-2 ring-blue-300">
+                                ${getAvatar(m.name, m.photoUrl)}
+                              </div>
+                              <div class="flex-1">
+                                <h4 class="font-bold text-slate-800">${m.name}</h4>
+                                <p class="text-sm text-slate-500">${m.role || 'Intern'}</p>
+                              </div>
+                              <div class="w-3 h-3 bg-green-500 rounded-full" title="Active"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                              <div class="bg-white rounded-lg p-3 text-center">
+                                <div class="text-2xl font-bold text-blue-600">${memberTasks.length}</div>
+                                <div class="text-xs text-slate-600">Tasks</div>
+                              </div>
+                              <div class="bg-white rounded-lg p-3 text-center">
+                                <div class="text-2xl font-bold text-green-600">${memberSubmissions.length}</div>
+                                <div class="text-xs text-slate-600">Submitted</div>
+                              </div>
+                            </div>
+                          </div>
+                        `;
+                      }).join('')}
+                    </div>
+                  </div>
+                  
+                  <!-- Meetings Tab -->
+                  <div id="teamContent-meetings" class="team-content hidden">
+                    ${isAdmin ? `
+                      <div class="mb-6">
+                        <button onclick="openScheduleMeetingModal('${team.id}')" 
+                          class="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                          ${icons.plus}
+                          <span>Schedule Meeting</span>
+                        </button>
+                      </div>
+                    ` : ''}
+                    
+                    <div class="space-y-4">
+                      ${teamMeetings.length > 0 ? teamMeetings.map(meeting => {
+                        const meetingDate = new Date(meeting.meetingDate);
+                        const isPast = meetingDate < new Date();
+                        return `
+                          <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-5 border-2 border-purple-200">
+                            <div class="flex items-start justify-between mb-3">
+                              <div class="flex-1">
+                                <h4 class="font-bold text-slate-800 text-lg mb-2">${meeting.meetingTitle}</h4>
+                                <p class="text-sm text-slate-600 mb-3">${meeting.meetingDescription || 'No description'}</p>
+                                <div class="flex flex-wrap gap-3 text-sm">
+                                  <span class="flex items-center gap-2 text-slate-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    ${meetingDate.toLocaleDateString()}
+                                  </span>
+                                  <span class="flex items-center gap-2 text-slate-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    ${meeting.meetingTime || 'Time TBD'}
+                                  </span>
+                                </div>
+                              </div>
+                              <span class="px-3 py-1 text-xs font-medium rounded ${
+                                isPast ? 'bg-slate-100 text-slate-600' : 'bg-green-100 text-green-700'
+                              }">
+                                ${isPast ? 'Past' : 'Upcoming'}
+                              </span>
+                            </div>
+                            ${meeting.meetingLink ? `
+                              <a href="${meeting.meetingLink}" target="_blank" rel="noopener noreferrer"
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm font-medium">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                </svg>
+                                Join Meeting
+                              </a>
+                            ` : ''}
+                          </div>
+                        `;
+                      }).join('') : `
+                        <div class="text-center py-12 text-slate-400">
+                          <svg class="w-16 h-16 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                          </svg>
+                          <p>No meetings scheduled yet</p>
+                        </div>
+                      `}
+                    </div>
+                  </div>
+                  
+                  <!-- Files/Resources Tab -->
+                  <div id="teamContent-files" class="team-content hidden">
+                    ${isAdmin ? `
+                      <div class="mb-6">
+                        <button onclick="openAddResourceModal('${team.id}')" 
+                          class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                          ${icons.plus}
+                          <span>Add Resource</span>
+                        </button>
+                      </div>
+                    ` : ''}
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200 hover:shadow-lg transition-all cursor-pointer">
+                        <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-4">
+                          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                          </svg>
+                        </div>
+                        <h4 class="font-bold text-slate-800 mb-2">Project Guidelines</h4>
+                        <p class="text-sm text-slate-600">Team documentation and guidelines</p>
+                      </div>
+                      
+                      <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border-2 border-purple-200 hover:shadow-lg transition-all cursor-pointer">
+                        <div class="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mb-4">
+                          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                          </svg>
+                        </div>
+                        <h4 class="font-bold text-slate-800 mb-2">Code Repository</h4>
+                        <p class="text-sm text-slate-600">GitHub repository and resources</p>
+                      </div>
+                      
+                      <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border-2 border-green-200 hover:shadow-lg transition-all cursor-pointer">
+                        <div class="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center mb-4">
+                          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                          </svg>
+                        </div>
+                        <h4 class="font-bold text-slate-800 mb-2">Learning Resources</h4>
+                        <p class="text-sm text-slate-600">Tutorials and learning materials</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           `;
+        }
+      }
+
+      // Delete Confirmation
+      if (confirmDelete) {
+        const isTeam = confirmDelete.startsWith('team_');
+        
+        if (isTeam) {
+          const teamId = confirmDelete.replace('team_', '');
+          const team = appData.teams.find(t => t.id === teamId);
+          if (team) {
+            html += `
+              <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+                <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-4 md:p-6">
+                  <h3 class="text-base md:text-lg font-bold text-slate-800 mb-4">Confirm Delete Team</h3>
+                  <p class="text-sm md:text-base text-slate-600 mb-6">Are you sure you want to delete the team <strong>"${team.teamName}"</strong>? This action cannot be undone.</p>
+                  <div class="flex gap-3">
+                    <button onclick="cancelDelete()" 
+                      class="flex-1 px-4 py-3 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm md:text-base">
+                      Cancel
+                    </button>
+                    <button onclick="deleteTeam('${teamId}')" 
+                      class="flex-1 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm md:text-base">
+                      Delete Team
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+        } else {
+          const intern = appData.interns.find(i => i.id === confirmDelete);
+          if (intern) {
+            html += `
+              <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+                <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-4 md:p-6">
+                  <h3 class="text-base md:text-lg font-bold text-slate-800 mb-4">Confirm Delete</h3>
+                  <p class="text-sm md:text-base text-slate-600 mb-6">Are you sure you want to delete <strong>${intern.name}</strong>? This action cannot be undone.</p>
+                  <div class="flex gap-3">
+                    <button onclick="cancelDelete()" 
+                      class="flex-1 px-4 py-3 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm md:text-base">
+                      Cancel
+                    </button>
+                    <button onclick="deleteIntern('${confirmDelete}')" 
+                      class="flex-1 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm md:text-base">
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
         }
       }
 
@@ -2584,7 +3421,9 @@
           
           if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
             currentUser = { id: 'admin', name: 'Admin', email: ADMIN_EMAIL, role: 'admin' };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
             currentPage = 'dashboard';
+            localStorage.setItem('currentPage', currentPage);
             render();
             return;
           }
@@ -2592,7 +3431,9 @@
           const intern = appData.interns.find(i => i.email === email && i.password === password);
           if (intern) {
             currentUser = { id: intern.id, name: intern.name, email: intern.email, role: intern.role, photoUrl: intern.photoUrl };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
             currentPage = 'dashboard';
+            localStorage.setItem('currentPage', currentPage);
             render();
             return;
           }
@@ -2749,6 +3590,32 @@
         });
       }
 
+      // Edit Team
+      const editTeamForm = document.getElementById('editTeamForm');
+      if (editTeamForm) {
+        editTeamForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById('editTeamBtn');
+          btn.disabled = true;
+          btn.textContent = 'Saving...';
+          
+          const checkboxes = document.querySelectorAll('.edit-team-member-checkbox:checked');
+          const members = Array.from(checkboxes).map(cb => cb.value).join(',');
+          
+          editingIntern.teamName = document.getElementById('editTeamName').value;
+          editingIntern.teamDescription = document.getElementById('editTeamDescription').value;
+          editingIntern.members = members;
+          
+          const result = await updateFirestoreDoc(editingIntern);
+          if (result.success) {
+            closeModal('editTeam');
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Save Changes';
+          }
+        });
+      }
+
 
 
       // Submit Task
@@ -2842,6 +3709,47 @@
           input.focus();
         });
       }
+
+      // Send Team Message
+      const sendTeamMessageForm = document.getElementById('sendTeamMessageForm');
+      if (sendTeamMessageForm) {
+        sendTeamMessageForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const input = document.getElementById('teamMessageInput');
+          const btn = document.getElementById('sendTeamMessageBtn');
+          const messageText = input.value.trim();
+          
+          if (!messageText || !selectedTeamId) return;
+          
+          btn.disabled = true;
+          input.disabled = true;
+          
+          const message = {
+            type: 'teamMessage',
+            id: generateId(),
+            teamId: selectedTeamId,
+            message: messageText,
+            senderId: currentUser.id,
+            senderName: currentUser.name
+          };
+          
+          const result = await createFirestoreDoc(message);
+          if (result.success) {
+            input.value = '';
+            // Scroll to bottom after sending
+            setTimeout(() => {
+              const container = document.getElementById('teamMessagesContainer');
+              if (container) {
+                container.scrollTop = container.scrollHeight;
+              }
+            }, 100);
+          }
+          
+          btn.disabled = false;
+          input.disabled = false;
+          input.focus();
+        });
+      }
     }
 
     // Star Intern Functions
@@ -2880,9 +3788,23 @@
       }
     };
 
+    // Edit Team Functions
+    window.openEditTeamModal = function(teamId) {
+      editingIntern = appData.teams.find(t => t.id === teamId);
+      if (editingIntern) {
+        modals.editTeam = true;
+        render();
+      }
+    };
+
     // Delete Functions
     window.confirmDeleteIntern = function(internId) {
       confirmDelete = internId;
+      render();
+    };
+
+    window.confirmDeleteTeam = function(teamId) {
+      confirmDelete = 'team_' + teamId;
       render();
     };
 
@@ -2895,6 +3817,17 @@
       const intern = appData.interns.find(i => i.id === internId);
       if (intern) {
         const result = await deleteFirestoreDoc(intern);
+        if (result.success) {
+          confirmDelete = null;
+          render();
+        }
+      }
+    };
+
+    window.deleteTeam = async function(teamId) {
+      const team = appData.teams.find(t => t.id === teamId);
+      if (team) {
+        const result = await deleteFirestoreDoc(team);
         if (result.success) {
           confirmDelete = null;
           render();
@@ -2920,9 +3853,22 @@
     window.closeModal = function(modal) {
       modals[modal] = false;
       selectedInternId = null;
+      selectedTeamId = null;
       editingIntern = null;
       currentCalendarDate = new Date();
       render();
+    };
+
+    window.openTeamModal = function(teamId) {
+      selectedTeamId = teamId;
+      modals.teamHub = true;
+      render();
+      setTimeout(() => {
+        const container = document.getElementById('teamMessagesContainer');
+        if (container) {
+          container.scrollTop = container.scrollHeight;
+        }
+      }, 100);
     };
 
     window.openAttendanceModal = function(internId) {
@@ -3010,8 +3956,66 @@
     // Navigation
     window.navigateTo = function(page) {
       currentPage = page;
+      localStorage.setItem('currentPage', page);
       closeSidebar();
       render();
+    };
+
+    // Team Hub Functions
+    window.openTeamModal = function(teamId) {
+      selectedTeamId = teamId;
+      modals.teamHub = true;
+      render();
+      setTimeout(() => {
+        const container = document.getElementById('teamMessagesContainer');
+        if (container) {
+          container.scrollTop = container.scrollHeight;
+        }
+      }, 100);
+    };
+
+    window.switchTeamTab = function(tabName) {
+      // Hide all content
+      document.querySelectorAll('.team-content').forEach(el => el.classList.add('hidden'));
+      // Show selected content
+      const content = document.getElementById(`teamContent-${tabName}`);
+      if (content) content.classList.remove('hidden');
+      
+      // Update tab styles
+      document.querySelectorAll('.team-tab').forEach(tab => {
+        tab.classList.remove('border-blue-600', 'text-blue-600');
+        tab.classList.add('border-transparent', 'text-slate-600');
+      });
+      const activeTab = document.getElementById(`teamTab-${tabName}`);
+      if (activeTab) {
+        activeTab.classList.add('border-blue-600', 'text-blue-600');
+        activeTab.classList.remove('border-transparent', 'text-slate-600');
+      }
+      
+      // Scroll team messages to bottom when switching to chat tab
+      if (tabName === 'chat') {
+        setTimeout(() => {
+          const container = document.getElementById('teamMessagesContainer');
+          if (container) {
+            container.scrollTop = container.scrollHeight;
+          }
+        }, 100);
+      }
+    };
+
+    window.openScheduleMeetingModal = function(teamId) {
+      // Placeholder for now
+      alert('Meeting scheduling coming soon!');
+    };
+
+    window.openCreateTeamTaskModal = function(teamId) {
+      // Placeholder for now
+      alert('Team task creation coming soon!');
+    };
+
+    window.openAddResourceModal = function(teamId) {
+      // Placeholder for now
+      alert('Resource upload coming soon!');
     };
 
     // Sidebar toggle
@@ -3025,6 +4029,8 @@
       }
       currentUser = null;
       currentPage = 'dashboard';
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('currentPage');
       render();
     };
 
@@ -3034,5 +4040,5 @@
     // Initialize
     initApp();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bcb7582278ad9c7',t:'MTc2ODIwODM3OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bcba77f67f1d9c7',t:'MTc2ODIxMDQyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
