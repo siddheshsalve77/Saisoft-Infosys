@@ -15,6 +15,7 @@
       transition: background-color 0.3s ease, color 0.3s ease;
     }
     
+    /* --- DARK MODE ENHANCEMENTS --- */
     body.dark-mode {
       background: #0f172a;
       color: #e2e8f0;
@@ -25,23 +26,20 @@
       color: #e2e8f0 !important;
     }
     
-    .dark-mode .bg-slate-50 {
+    .dark-mode .bg-slate-50, .dark-mode .bg-slate-100 {
       background: #0f172a !important;
+      border-color: #334155 !important;
     }
     
-    .dark-mode .bg-slate-100 {
-      background: #334155 !important;
+    .dark-mode .text-slate-800, .dark-mode .text-slate-900, .dark-mode .text-gray-800 {
+      color: #f8fafc !important;
     }
     
-    .dark-mode .text-slate-800 {
-      color: #e2e8f0 !important;
-    }
-    
-    .dark-mode .text-slate-600 {
+    .dark-mode .text-slate-700, .dark-mode .text-slate-600, .dark-mode .text-gray-600 {
       color: #cbd5e1 !important;
     }
     
-    .dark-mode .text-slate-500 {
+    .dark-mode .text-slate-500, .dark-mode .text-gray-500 {
       color: #94a3b8 !important;
     }
     
@@ -49,16 +47,8 @@
       color: #64748b !important;
     }
     
-    .dark-mode .text-slate-700 {
-      color: #cbd5e1 !important;
-    }
-    
-    .dark-mode .border-slate-200 {
+    .dark-mode .border-slate-200, .dark-mode .border-gray-200, .dark-mode .border-slate-100 {
       border-color: #334155 !important;
-    }
-    
-    .dark-mode .border-slate-100 {
-      border-color: #1e293b !important;
     }
     
     .dark-mode .hover\:bg-slate-50:hover {
@@ -76,7 +66,14 @@
     .dark-mode .bg-gradient-to-br {
       color: #e2e8f0 !important;
     }
+
+    .dark-mode input, .dark-mode select, .dark-mode textarea {
+      background-color: #1e293b;
+      color: #e2e8f0;
+      border-color: #475569;
+    }
     
+    /* --- ANIMATIONS --- */
     @keyframes confetti-fall {
       0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
       100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
@@ -101,6 +98,36 @@
       0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
       50% { transform: scale(1) rotate(180deg); opacity: 1; }
     }
+
+    /* --- STAR INTERN GOLD CARD DESIGN --- */
+    @keyframes shine {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .star-intern-card {
+      background: linear-gradient(135deg, #fffbeb 0%, #fff7ed 100%);
+      border: 1px solid #fcd34d;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .dark-mode .star-intern-card {
+      background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
+      border: 1px solid #b45309;
+    }
+
+    .star-intern-shine {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+      background-size: 200% 100%;
+      animation: shine 3s infinite linear;
+      pointer-events: none;
+    }
     
     .confetti-piece {
       position: fixed;
@@ -109,10 +136,6 @@
       z-index: 9999;
       animation: confetti-fall 4s ease-in forwards;
       pointer-events: none;
-    }
-    
-    .celebration-banner {
-      animation: celebration-pulse 2s ease-in-out infinite;
     }
     
     .shimmer-text {
@@ -260,11 +283,16 @@
       height: 40px;
       animation: spin 1s linear infinite;
     }
-    
-    /* Kanban Specific Styles */
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* --- KANBAN STYLES --- */
     .kanban-col {
-      min-width: 300px;
-      max-width: 300px;
+      min-width: 320px;
+      max-width: 320px;
       flex-shrink: 0;
     }
     
@@ -286,11 +314,6 @@
     .kanban-drop-zone.drag-over {
       background-color: rgba(59, 130, 246, 0.1);
       border-radius: 0.75rem;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
     }
 
     /* MOBILE RESPONSIVE STYLES */
@@ -347,12 +370,19 @@
       background: linear-gradient(135deg, #3b82f6, #2563eb);
       margin-left: auto;
       border-radius: 18px 18px 4px 18px;
+      color: white;
     }
 
     .message-bubble.received {
       background: #f1f5f9;
       margin-right: auto;
       border-radius: 18px 18px 18px 4px;
+      color: #1e293b;
+    }
+    
+    .dark-mode .message-bubble.received {
+      background: #334155;
+      color: #e2e8f0;
     }
 
     @keyframes slideIn {
@@ -369,6 +399,97 @@
     .messages-container {
       scroll-behavior: smooth;
     }
+
+    /* Attendance Calendar Styles */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .calendar-day:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .calendar-day.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .calendar-day.present {
+      background: #10b981;
+      border-color: #059669;
+      color: white;
+    }
+
+    .calendar-day.absent {
+      background: #ef4444;
+      border-color: #dc2626;
+      color: white;
+    }
+
+    .calendar-day.wfh {
+      background: #f59e0b;
+      border-color: #d97706;
+      color: white;
+    }
+
+    .calendar-day.leave {
+      background: #3b82f6;
+      border-color: #2563eb;
+      color: white;
+    }
+
+    .calendar-day.today {
+      border-width: 3px;
+      border-color: #3b82f6;
+    }
+
+    .attendance-badge {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin: 0 2px;
+    }
+
+    .attendance-badge.present { background: #10b981; }
+    .attendance-badge.absent { background: #ef4444; }
+    .attendance-badge.wfh { background: #f59e0b; }
+    .attendance-badge.leave { background: #3b82f6; }
+
+    .attendance-stats-bar {
+      display: flex;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #e2e8f0;
+    }
+
+    .attendance-stats-bar .segment {
+      height: 100%;
+    }
+
+    .attendance-stats-bar .segment.present { background: #10b981; }
+    .attendance-stats-bar .segment.absent { background: #ef4444; }
+    .attendance-stats-bar .segment.wfh { background: #f59e0b; }
+    .attendance-stats-bar .segment.leave { background: #3b82f6; }
 
     @media (min-width: 769px) {
       .sidebar {
@@ -397,6 +518,18 @@
 
       h1 {
         font-size: 1.5rem !important;
+      }
+
+      h2 {
+        font-size: 1.25rem !important;
+      }
+
+      h3 {
+        font-size: 1rem !important;
+      }
+
+      .message-bubble {
+        max-width: 85%;
       }
     }
   </style>
@@ -457,8 +590,9 @@
     let darkMode = localStorage.getItem('darkMode') === 'true';
     let modals = {};
     let selectedInternId = null;
-    let selectedTaskId = null;
-    let selectedKanbanProject = 'all';
+    let selectedTaskId = null; // New for Kanban/Daily Updates
+    let selectedKanbanProject = 'all'; // New for Kanban
+    let selectedDates = [];
     let confirmDelete = null;
     let unsubscribeFirestore = null;
     let sidebarOpen = false;
@@ -475,7 +609,6 @@
       users: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
       clipboard: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>`,
       briefcase: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
-      kanban: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><path d="M15 3v18"/><path d="M3 9h18"/><path d="M3 15h18"/></svg>`,
       usersGroup: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
       calendar: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`,
       ticket: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>`,
@@ -491,7 +624,8 @@
       star: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
       menu: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`,
       messageCircle: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>`,
-      send: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`
+      send: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`,
+      kanban: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><path d="M15 3v18"/><path d="M3 9h18"/><path d="M3 15h18"/></svg>`
     };
 
     // Generate unique ID
@@ -655,7 +789,7 @@
         // Only re-render if NOT in attendance modal to prevent scroll jump
         if (!modals.attendance && !modals.dailyUpdate) {
           render();
-        } else {
+        } else if (modals.attendance) {
           // Just update the attendance calendar without full re-render
           updateAttendanceCalendarOnly();
         }
@@ -726,6 +860,48 @@
       }
     }
 
+    // Star Intern Banner (NEW REDESIGN)
+    function renderStarInternBanner() {
+      const starIntern = getStarIntern();
+      if (!starIntern) return '';
+
+      return `
+        <div class="mb-8">
+          <div class="star-intern-card rounded-2xl p-6 shadow-xl relative group">
+            <div class="star-intern-shine"></div>
+            
+            <div class="absolute -top-3 -right-3 text-yellow-400 opacity-20 transform rotate-12 group-hover:scale-110 transition-transform">
+              <svg width="120" height="120" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+
+            <div class="relative flex flex-col md:flex-row items-center gap-6">
+              <div class="relative">
+                <div class="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full blur opacity-75"></div>
+                <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg relative bg-white">
+                  ${getAvatar(starIntern.name, starIntern.photoUrl)}
+                </div>
+                <div class="absolute -bottom-2 -right-2 bg-yellow-400 text-white p-2 rounded-full shadow-lg border-2 border-white">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6.4-4.8-6.4 4.8 2.4-7.2-6-4.8h7.6z"/></svg>
+                </div>
+              </div>
+
+              <div class="text-center md:text-left flex-1">
+                <div class="flex items-center justify-center md:justify-start gap-2 mb-1">
+                  <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded border border-yellow-200 uppercase tracking-wide">Star Intern of the Week</span>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800 mb-1">${starIntern.name}</h2>
+                <p class="text-slate-600 font-medium mb-3">${starIntern.role}</p>
+                <div class="flex gap-4 justify-center md:justify-start text-sm text-slate-500">
+                  <span class="flex items-center gap-1">🏆 Top Performer</span>
+                  <span class="flex items-center gap-1">🔥 Consistent</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     // Login Page
     function renderLoginPage() {
       return `
@@ -768,7 +944,7 @@
               </form>
               
               <p class="text-center text-slate-400 text-xs md:text-sm mt-4 md:mt-6">
-                🔥 Real-Time Sync Enabled • Secure Access
+                🔥 Real-Time Sync Enabled  Secure Access
               </p>
             </div>
           </div>
@@ -877,122 +1053,101 @@
       `;
     }
 
-    // KANBAN BOARD RENDERER
+    // --- KANBAN RENDERER ---
     function renderKanbanPage() {
-      // 1. Get filtered tasks
-      let tasks = appData.tasks;
-      if (selectedKanbanProject !== 'all') {
-        tasks = tasks.filter(t => t.projectId === selectedKanbanProject);
-      }
+      // Filter tasks by project if selected
+      let tasks = selectedKanbanProject === 'all' 
+        ? appData.tasks 
+        : appData.tasks.filter(t => t.projectId === selectedKanbanProject);
 
-      // 2. Define Columns
       const columns = [
-        { id: 'todo', label: 'To Do', bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-200' },
-        { id: 'in-progress', label: 'In Progress', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
-        { id: 'review', label: 'Review / Testing', bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
-        { id: 'completed', label: 'Done', bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' }
+        { id: 'todo', label: 'To Do', color: 'bg-slate-400' },
+        { id: 'in-progress', label: 'In Progress', color: 'bg-blue-500' },
+        { id: 'review', label: 'Review', color: 'bg-purple-500' },
+        { id: 'completed', label: 'Done', color: 'bg-green-500' }
       ];
 
-      // 3. Render
       return `
         <div class="p-4 md:p-8 h-full flex flex-col">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <div>
-              <h1 class="text-xl md:text-2xl font-bold text-slate-800">Project Board 🚀</h1>
-              <p class="text-sm md:text-base text-slate-500">Live Kanban • Drag & Drop • Daily Tracking</p>
+              <h1 class="text-2xl font-bold text-slate-800">Project Board 🚀</h1>
+              <p class="text-slate-500 text-sm">Drag tasks to update progress</p>
             </div>
-            <div class="flex items-center gap-3">
-              <select onchange="filterKanbanProject(this.value)" class="px-4 py-2 border border-slate-200 rounded-lg bg-white text-sm focus:ring-2 focus:ring-blue-500">
+            <div class="flex flex-wrap items-center gap-3">
+              <select onchange="filterKanbanProject(this.value)" class="px-4 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="all">All Projects</option>
                 ${appData.projects.map(p => `<option value="${p.id}" ${selectedKanbanProject === p.id ? 'selected' : ''}>${p.projectTitle}</option>`).join('')}
               </select>
-              <button onclick="openModal('addTask')" 
-                class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm shadow-md">
-                ${icons.plus}
-                <span class="hidden sm:inline">Add Task</span>
-              </button>
+              
+              ${currentUser.role === 'admin' ? `
+                <button onclick="openModal('addProject')" class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg text-sm hover:bg-slate-50">
+                  ${icons.plus} New Project
+                </button>
+                <button onclick="openModal('addTask')" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 shadow-md">
+                  ${icons.plus} New Task
+                </button>
+              ` : ''}
             </div>
           </div>
 
-          <!-- Kanban Board Container -->
           <div class="flex-1 overflow-x-auto overflow-y-hidden pb-4">
-            <div class="flex gap-4 h-full min-w-full">
+            <div class="flex gap-6 h-full min-w-full">
               ${columns.map(col => {
                 const colTasks = tasks.filter(t => (t.status || 'todo') === col.id);
                 return `
-                  <div class="kanban-col flex flex-col h-full bg-slate-50 rounded-xl border border-slate-200 shadow-sm"
-                       onbackendragover="handleDragOver(event)" 
-                       ondrop="handleDrop(event, '${col.id}')">
-                    
-                    <!-- Column Header -->
-                    <div class="p-4 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-slate-50 rounded-t-xl z-10">
+                  <div class="kanban-col flex flex-col h-full bg-slate-50/50 rounded-xl border border-slate-200"
+                       ondragover="handleDragOver(event)" ondrop="handleDrop(event, '${col.id}')">
+                    <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-white rounded-t-xl sticky top-0 z-10">
                       <div class="flex items-center gap-2">
-                        <span class="w-3 h-3 rounded-full ${col.id === 'todo' ? 'bg-slate-400' : col.id === 'in-progress' ? 'bg-blue-500' : col.id === 'review' ? 'bg-purple-500' : 'bg-green-500'}"></span>
+                        <span class="w-2.5 h-2.5 rounded-full ${col.color}"></span>
                         <h3 class="font-bold text-slate-700 text-sm">${col.label}</h3>
                       </div>
-                      <span class="bg-white px-2 py-0.5 rounded text-xs font-bold text-slate-500 border border-slate-200">${colTasks.length}</span>
+                      <span class="bg-slate-100 text-slate-500 px-2 py-0.5 rounded text-xs font-bold">${colTasks.length}</span>
                     </div>
-
-                    <!-- Cards Container -->
-                    <div class="flex-1 overflow-y-auto p-3 space-y-3 scrollbar-thin kanban-drop-zone"
-                         ondragover="this.classList.add('drag-over'); event.preventDefault();"
-                         ondragleave="this.classList.remove('drag-over')">
-                      
-                      ${colTasks.length > 0 ? colTasks.map(task => {
-                        const assignee = appData.interns.find(i => i.id === task.assignedTo) || { name: 'Unassigned', photoUrl: '' };
+                    
+                    <div class="flex-1 overflow-y-auto p-3 space-y-3 scrollbar-thin kanban-drop-zone">
+                      ${colTasks.map(task => {
                         const project = appData.projects.find(p => p.id === task.projectId);
-                        const progress = task.progress || 0;
-                        const subBranch = task.subBranch ? `<span class="text-[10px] uppercase tracking-wider bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded">${task.subBranch}</span>` : '';
-
+                        // Handle multiple assignees
+                        const assigneeIds = Array.isArray(task.assignedTo) ? task.assignedTo : [task.assignedTo];
+                        const assignees = assigneeIds.map(id => appData.interns.find(i => i.id === id)).filter(Boolean);
+                        
                         return `
-                          <div class="kanban-card bg-white p-3 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-all group relative"
-                               draggable="true"
-                               ondragstart="handleDragStart(event, '${task.id}')"
+                          <div class="kanban-card bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all relative group"
+                               draggable="true" ondragstart="handleDragStart(event, '${task.id}')"
                                onclick="openDailyUpdateModal('${task.id}')">
                             
-                            <!-- Tags -->
-                            <div class="flex items-center gap-2 mb-2 flex-wrap">
-                              <span class="px-2 py-0.5 text-[10px] font-bold rounded ${
-                                task.priority === 'high' ? 'bg-red-100 text-red-700' :
-                                task.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                                'bg-green-100 text-green-700'
-                              }">${task.priority || 'Low'}</span>
-                              ${project ? `<span class="text-[10px] text-blue-600 font-medium truncate max-w-[100px]">${project.projectTitle}</span>` : ''}
-                              ${subBranch}
+                            <div class="flex flex-wrap gap-2 mb-2">
+                              ${project ? `<span class="text-[10px] px-2 py-0.5 bg-blue-50 text-blue-600 rounded font-medium">${project.projectTitle}</span>` : ''}
+                              ${task.subBranch ? `<span class="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-600 rounded font-medium">${task.subBranch}</span>` : ''}
+                              <span class="text-[10px] px-2 py-0.5 rounded font-bold uppercase ${task.priority === 'high' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}">${task.priority}</span>
                             </div>
 
-                            <!-- Title -->
-                            <h4 class="text-sm font-semibold text-slate-800 mb-2 leading-snug">${task.title}</h4>
+                            <h4 class="text-sm font-bold text-slate-800 mb-2 leading-snug">${task.title}</h4>
                             
-                            <!-- Progress Bar -->
                             <div class="w-full bg-slate-100 rounded-full h-1.5 mb-3 overflow-hidden">
-                              <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-full rounded-full transition-all duration-500" style="width: ${progress}%"></div>
+                              <div class="bg-blue-600 h-full rounded-full transition-all" style="width: ${task.progress || 0}%"></div>
                             </div>
 
-                            <!-- Footer -->
-                            <div class="flex items-center justify-between">
-                              <div class="flex items-center gap-2" title="Assigned to ${assignee.name}">
-                                <div class="w-6 h-6 rounded-full overflow-hidden ring-1 ring-slate-100">
-                                  ${getAvatar(assignee.name, assignee.photoUrl)}
-                                </div>
-                                <span class="text-xs text-slate-500">${progress}% Done</span>
+                            <div class="flex justify-between items-end">
+                              <div class="flex -space-x-2">
+                                ${assignees.map(a => `
+                                  <div class="w-6 h-6 rounded-full ring-2 ring-white overflow-hidden bg-white" title="${a.name}">
+                                    ${getAvatar(a.name, a.photoUrl)}
+                                  </div>
+                                `).join('')}
+                                ${assignees.length === 0 ? '<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] text-slate-500">?</div>' : ''}
                               </div>
-                              <div class="text-xs text-slate-400">
-                                ${new Date(task.deadline).toLocaleDateString(undefined, {month:'short', day:'numeric'})}
-                              </div>
+                              <span class="text-xs text-slate-400 font-medium">${task.progress || 0}%</span>
                             </div>
                             
-                            <!-- Edit/Update Hint -->
-                            <div class="absolute inset-0 bg-black/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <span class="bg-white shadow-sm px-2 py-1 rounded text-xs font-semibold text-slate-700">Click to Update</span>
+                            <div class="absolute inset-0 bg-black/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                              <span class="bg-white px-2 py-1 rounded text-xs font-bold shadow-sm text-slate-700">Update</span>
                             </div>
                           </div>
                         `;
-                      }).join('') : `
-                        <div class="text-center py-8 opacity-40">
-                          <p class="text-xs text-slate-500">No tasks</p>
-                        </div>
-                      `}
+                      }).join('')}
                     </div>
                   </div>
                 `;
@@ -1003,72 +1158,35 @@
       `;
     }
 
-    // --- Drag and Drop Logic ---
-    function handleDragStart(e, taskId) {
-      e.dataTransfer.setData('text/plain', taskId);
-      e.target.classList.add('dragging');
-    }
-
-    function handleDragOver(e) {
-      e.preventDefault(); // Necessary for Drop
-    }
-
-    async function handleDrop(e, newStatus) {
-      e.preventDefault();
-      const taskId = e.dataTransfer.getData('text/plain');
-      const dropZone = e.target.closest('.kanban-drop-zone');
-      if(dropZone) dropZone.classList.remove('drag-over');
-
-      // Optimistic Update
-      const taskIndex = appData.tasks.findIndex(t => t.id === taskId);
-      if (taskIndex > -1) {
-        const task = { ...appData.tasks[taskIndex] }; // Copy
-        if (task.status !== newStatus) {
-            // If moving to Done, set progress to 100
-            if (newStatus === 'completed') task.progress = 100;
-            // If moving from Done to Todo, set progress to 0
-            if (newStatus === 'todo' && task.status === 'completed') task.progress = 0;
-            
-            task.status = newStatus;
-            
-            // UI refresh immediately handled by Firestore listener, but we can do a quick check
-            await updateFirestoreDoc(task);
-        }
-      }
-      
-      // Cleanup visual drag classes
-      document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
-    }
-
-    function filterKanbanProject(projectId) {
-      selectedKanbanProject = projectId;
-      render();
-    }
-
-    // --- Daily Update Modal ---
-    function openDailyUpdateModal(taskId) {
-      selectedTaskId = taskId;
-      modals.dailyUpdate = true;
-      render();
-    }
-    
-    // Admin Dashboard
+    // Admin Dashboard (UPDATED)
     function renderAdminDashboard() {
-      // ... (No changes to logic, just returning the HTML)
       const dateInfo = getCurrentDateInfo();
       const activeInterns = appData.interns.filter(i => i.status === 'active').length;
       const pendingTickets = appData.tickets.filter(t => t.ticketStatus === 'open').length;
+      const openTicketsList = appData.tickets.filter(t => t.ticketStatus === 'open');
+      const recentTasks = appData.tasks.slice(-5).reverse();
       
       return `
         <div class="p-4 md:p-8">
           ${renderStarInternBanner()}
           
-          <div class="mb-6 md:mb-8">
-            <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Welcome back, Admin! 👋</h1>
-            <p class="text-sm md:text-base text-slate-500 mt-1">${dateInfo.dayName}, ${dateInfo.month} ${dateInfo.day}, ${dateInfo.year}</p>
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div>
+              <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Welcome back, Admin! 👋</h1>
+              <p class="text-slate-500 text-sm mt-1">${dateInfo.dayName}, ${dateInfo.month} ${dateInfo.day}, ${dateInfo.year}</p>
+            </div>
+            
+            <div class="flex gap-2">
+              <button onclick="navigateTo('kanban')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 shadow-sm flex items-center gap-2">
+                ${icons.kanban} Project Board
+              </button>
+              <button onclick="navigateTo('interns')" class="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 shadow-sm flex items-center gap-2">
+                ${icons.users} Manage Interns
+              </button>
+            </div>
           </div>
           
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8">
             <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 md:p-6 text-white card-hover">
               <div class="text-2xl md:text-4xl mb-2">${icons.users}</div>
               <h3 class="text-2xl md:text-3xl font-bold">${activeInterns}</h3>
@@ -1093,186 +1211,637 @@
               <p class="text-orange-100 text-xs md:text-sm">Open Tickets</p>
             </div>
           </div>
-        </div>
-      `;
-    }
 
-    // ... (Keeping all existing functions: getStarIntern, renderStarInternBanner, etc.)
-    // Only showing updated render function logic at the bottom
-
-    function renderStarInternBanner() {
-      const starIntern = getStarIntern();
-      if (!starIntern) return '';
-
-      return `
-        <div class="mb-6 md:mb-8 relative overflow-hidden">
-          <div class="celebration-banner relative rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
-            <div class="absolute inset-0 bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-400 animate-pulse"></div>
-            <div class="relative p-6 md:p-10">
-              <div class="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-                <div class="relative flex-shrink-0">
-                  <div class="relative w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white shadow-2xl ring-4 ring-yellow-300">
-                    ${getAvatar(starIntern.name, starIntern.photoUrl)}
+          <!-- Recent Activity Section -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-full">
+              <div class="p-5 border-b border-slate-200">
+                <h3 class="font-bold text-slate-800">Recent Tasks</h3>
+              </div>
+              <div class="p-5 overflow-y-auto max-h-80 space-y-4 scrollbar-thin">
+                ${recentTasks.length ? recentTasks.map(t => `
+                  <div class="flex items-start gap-3 pb-3 border-b border-slate-100 last:border-0 last:pb-0">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 flex-shrink-0 text-xs">
+                      ${t.priority === 'high' ? '🔴' : t.priority === 'medium' ? '🟡' : '🟢'}
+                    </div>
+                    <div>
+                      <p class="text-sm font-semibold text-slate-800">${t.title}</p>
+                      <p class="text-xs text-slate-500">Added to ${appData.projects.find(p=>p.id===t.projectId)?.projectTitle || 'General'}</p>
+                    </div>
                   </div>
-                </div>
-                <div class="flex-1 text-center md:text-left">
-                  <h2 class="text-2xl md:text-4xl font-black text-white drop-shadow-2xl tracking-tight">STAR INTERN</h2>
-                  <p class="text-xl md:text-2xl font-black bg-white/90 bg-clip-text text-transparent mb-2">${starIntern.name}</p>
-                  <span class="px-3 py-1 bg-white/80 backdrop-blur-sm rounded-lg text-amber-900 font-bold text-xs md:text-sm shadow-md">${starIntern.role}</span>
-                </div>
+                `).join('') : '<p class="text-sm text-slate-400">No recent tasks.</p>'}
+              </div>
+            </div>
+
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-full">
+              <div class="p-5 border-b border-slate-200">
+                <h3 class="font-bold text-slate-800">Support Requests</h3>
+              </div>
+              <div class="p-5 overflow-y-auto max-h-80 space-y-4 scrollbar-thin">
+                ${openTicketsList.length ? openTicketsList.slice(0,5).map(t => `
+                  <div class="flex items-center justify-between pb-3 border-b border-slate-100 last:border-0 last:pb-0">
+                    <div>
+                      <p class="text-sm font-medium text-slate-800">${t.message}</p>
+                      <p class="text-xs text-slate-500">From: ${t.raisedByName}</p>
+                    </div>
+                    <span class="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded">Open</span>
+                  </div>
+                `).join('') : '<p class="text-sm text-slate-400">All caught up! No open tickets.</p>'}
               </div>
             </div>
           </div>
         </div>
       `;
     }
-    
-    // ... (Previous Dashboard Logic)
 
-    // Modals
+    // Intern Dashboard (UPDATED)
+    function renderInternDashboard() {
+      // (Reusing the original detailed dashboard structure but with updated Star Intern banner)
+      const dateInfo = getCurrentDateInfo();
+      const myTasks = appData.tasks.filter(t => {
+          if(Array.isArray(t.assignedTo)) return t.assignedTo.includes(currentUser.id);
+          return t.assignedTo === currentUser.id || t.assignedTo === 'all';
+      });
+      const mySubmissions = appData.submissions.filter(s => s.submittedBy === currentUser.id);
+      const myTickets = appData.tickets.filter(t => t.raisedBy === currentUser.id);
+      const attendanceStats = getAttendanceStats(currentUser.id);
+      
+      const quotes = [
+        { text: "Code is like humor. When you have to explain it, it's bad.", author: "Cory House" },
+        { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
+        { text: "Learning to code is learning to create and innovate.", author: "Codecademy" }
+      ];
+      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      
+      return `
+        <div class="p-4 md:p-8">
+          ${renderStarInternBanner()}
+          
+          <div class="mb-6 md:mb-8 relative overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-3xl p-6 md:p-8 text-white shadow-2xl relative">
+              <div class="relative">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-12 h-12 md:w-16 md:h-16 rounded-full overflow-hidden border-4 border-white shadow-lg ring-4 ring-white/30">
+                    ${getAvatar(currentUser.name, currentUser.photoUrl)}
+                  </div>
+                  <div class="flex-1">
+                    <h1 class="text-2xl md:text-4xl font-black mb-1 drop-shadow-lg">Welcome back, ${currentUser.name}! 🎉</h1>
+                    <p class="text-sm md:text-lg text-white/90 font-medium">${dateInfo.dayName}, ${dateInfo.month} ${dateInfo.day}, ${dateInfo.year}</p>
+                  </div>
+                </div>
+                
+                <div class="mt-6 bg-white/10 backdrop-blur-md rounded-2xl p-4 md:p-6 border-2 border-white/20">
+                  <p class="text-base md:text-xl font-semibold mb-2 leading-relaxed">"${randomQuote.text}"</p>
+                  <p class="text-sm md:text-base text-white/80 font-medium">— ${randomQuote.author}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8">
+            <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl p-4 md:p-6 text-white card-hover shadow-xl">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">${icons.clipboard}</div>
+                <h3 class="font-bold text-sm">My Tasks</h3>
+              </div>
+              <p class="text-3xl font-black">${myTasks.length}</p>
+            </div>
+            
+            <div class="bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl p-4 md:p-6 text-white card-hover shadow-xl">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">${icons.calendar}</div>
+                <h3 class="font-bold text-sm">Attendance</h3>
+              </div>
+              <p class="text-3xl font-black">${attendanceStats.present}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Interns Management (Restored Original)
+    function renderInternsPage() {
+      const starIntern = getStarIntern();
+      
+      return `
+        <div class="p-4 md:p-8">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
+            <div>
+              <h1 class="text-xl md:text-2xl font-bold text-slate-800">Intern Management</h1>
+              <p class="text-sm md:text-base text-slate-500">Manage your team • 🔥 Live Sync</p>
+            </div>
+            <button onclick="openModal('addIntern')" 
+              class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+              ${icons.plus}
+              <span>Add Intern</span>
+            </button>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            ${appData.interns.length > 0 ? appData.interns.map(intern => {
+              const isStarIntern = intern.isStarIntern === true;
+              return `
+                <div class="bg-white rounded-xl p-4 md:p-6 border ${isStarIntern ? 'border-amber-300 ring-2 ring-amber-200' : 'border-slate-200'} card-hover relative overflow-hidden">
+                  <div class="relative">
+                    <div class="flex items-start gap-3 md:gap-4 mb-4">
+                      <div class="relative">
+                        <div class="w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden flex-shrink-0 ${isStarIntern ? 'ring-2 ring-amber-400' : ''}">
+                          ${getAvatar(intern.name, intern.photoUrl)}
+                        </div>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <h3 class="font-bold text-slate-800 truncate text-sm md:text-base">${intern.name}</h3>
+                        <p class="text-xs md:text-sm text-slate-500 truncate">${intern.email}</p>
+                        <span class="inline-block mt-2 px-2 md:px-3 py-1 ${isStarIntern ? 'bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 font-bold' : 'bg-blue-100 text-blue-700'} rounded-full text-xs">
+                          ${intern.role}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mb-2">
+                      <button onclick="openEditInternModal('${intern.id}')" 
+                        class="px-2 md:px-3 py-2 bg-blue-100 text-blue-600 rounded-lg text-xs font-medium hover:bg-blue-200 transition-colors flex items-center justify-center gap-1">
+                        <span>Edit</span>
+                      </button>
+                      ${!isStarIntern ? `
+                        <button onclick="setStarIntern('${intern.id}')" 
+                          class="px-2 md:px-3 py-2 bg-gradient-to-r from-yellow-400 to-amber-500 text-white rounded-lg text-xs font-bold hover:from-yellow-500 hover:to-amber-600 transition-all shadow-md flex items-center justify-center gap-1">
+                          <span>Star</span>
+                        </button>
+                      ` : `
+                        <button onclick="removeStarIntern('${intern.id}')" 
+                          class="px-2 md:px-3 py-2 bg-slate-100 text-slate-600 rounded-lg text-xs font-medium hover:bg-slate-200 transition-colors">
+                          Remove Star
+                        </button>
+                      `}
+                    </div>
+                    <button onclick="confirmDeleteIntern('${intern.id}')" 
+                      class="w-full px-2 md:px-3 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors text-xs font-medium flex items-center justify-center gap-2">
+                      ${icons.trash}
+                      <span>Delete Intern</span>
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('') : `
+              <div class="col-span-full bg-white rounded-xl p-8 md:p-12 border border-slate-200 text-center text-slate-400">
+                <p class="text-base md:text-lg mb-2">No interns yet</p>
+                <p class="text-xs md:text-sm">Click "Add Intern" to get started</p>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    // Attendance Page (Restored Original)
+    function renderAttendancePage() {
+      return `
+        <div class="p-4 md:p-8">
+          <div class="mb-6 md:mb-8">
+            <h1 class="text-xl md:text-2xl font-bold text-slate-800">Attendance Management</h1>
+            <p class="text-sm md:text-base text-slate-500">Track intern attendance</p>
+          </div>
+          
+          <div class="grid grid-cols-1 gap-4 md:gap-6">
+            ${appData.interns.map(intern => {
+              const stats = getAttendanceStats(intern.id);
+              return `
+                <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200">
+                  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                    <div class="flex items-center gap-3 md:gap-4">
+                      <div class="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden">
+                        ${getAvatar(intern.name, intern.photoUrl)}
+                      </div>
+                      <div>
+                        <h3 class="font-bold text-slate-800 text-sm md:text-base">${intern.name}</h3>
+                        <p class="text-xs md:text-sm text-slate-500">${stats.total} days recorded</p>
+                      </div>
+                    </div>
+                    <button onclick="openAttendanceModal('${intern.id}')" 
+                      class="w-full sm:w-auto px-3 md:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs md:text-sm font-medium">
+                      Update Attendance
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Tasks Page (Restored)
+    function renderTasksPage() {
+      return `
+        <div class="p-4 md:p-8">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
+            <div>
+              <h1 class="text-xl md:text-2xl font-bold text-slate-800">Task Management</h1>
+              <p class="text-sm md:text-base text-slate-500">Create and manage tasks</p>
+            </div>
+            <button onclick="openModal('addTask')" 
+              class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+              ${icons.plus}
+              <span>Create Task</span>
+            </button>
+          </div>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+            ${appData.tasks.length > 0 ? appData.tasks.map(task => {
+              const submissions = appData.submissions.filter(s => s.taskId === task.id);
+              return `
+                <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
+                  <div class="flex items-start justify-between mb-3 gap-3">
+                    <h3 class="font-bold text-slate-800 flex-1 text-sm md:text-base">${task.title}</h3>
+                    <span class="px-2 py-1 text-xs font-medium rounded whitespace-nowrap ${
+                      task.priority === 'high' ? 'bg-red-100 text-red-700' :
+                      task.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                      'bg-green-100 text-green-700'
+                    }">${task.priority || 'low'}</span>
+                  </div>
+                  <p class="text-slate-600 text-xs md:text-sm mb-4 line-clamp-2">${task.description}</p>
+                  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs md:text-sm">
+                    <span class="text-slate-500">Due: ${new Date(task.deadline).toLocaleDateString()}</span>
+                    <span class="text-blue-600 font-medium">${submissions.length} submissions</span>
+                  </div>
+                </div>
+              `;
+            }).join('') : `
+              <div class="col-span-full bg-white rounded-xl p-8 md:p-12 border border-slate-200 text-center text-slate-400">
+                <p class="text-sm md:text-base">No tasks yet. Click "Create Task" to add one.</p>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    // Projects Page (Restored)
+    function renderProjectsPage() {
+      return `
+        <div class="p-4 md:p-8">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
+            <div>
+              <h1 class="text-xl md:text-2xl font-bold text-slate-800">Project Management</h1>
+              <p class="text-sm md:text-base text-slate-500">Track ongoing projects</p>
+            </div>
+            <button onclick="openModal('addProject')" 
+              class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+              ${icons.plus}
+              <span>Add Project</span>
+            </button>
+          </div>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+            ${appData.projects.length > 0 ? appData.projects.map(project => `
+              <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200 card-hover">
+                <div class="flex items-start justify-between mb-3 gap-3">
+                  <h3 class="font-bold text-slate-800 flex-1 text-sm md:text-base">${project.projectTitle}</h3>
+                  <span class="px-2 py-1 text-xs font-medium rounded whitespace-nowrap bg-blue-100 text-blue-700">
+                    ${project.projectStatus || 'planning'}
+                  </span>
+                </div>
+                <p class="text-slate-600 text-xs md:text-sm mb-4 line-clamp-2">${project.projectDescription}</p>
+                ${project.technologies ? `
+                  <div class="flex flex-wrap gap-2 mb-4">
+                    ${project.technologies.split(',').map(tech => `
+                      <span class="px-2 py-1 bg-slate-100 text-slate-700 rounded text-xs">${tech.trim()}</span>
+                    `).join('')}
+                  </div>
+                ` : ''}
+              </div>
+            `).join('') : `
+              <div class="col-span-full bg-white rounded-xl p-8 md:p-12 border border-slate-200 text-center text-slate-400">
+                <p class="text-sm md:text-base">No projects yet. Click "Add Project" to create one.</p>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    // Teams Page (Restored)
+    function renderTeamsPage() {
+      const isAdmin = currentUser.role === 'admin';
+      
+      return `
+        <div class="p-4 md:p-8">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
+            <div>
+              <h1 class="text-xl md:text-2xl font-bold text-slate-800">Team Management 👥</h1>
+              <p class="text-sm md:text-base text-slate-500">${isAdmin ? 'Organize and manage teams' : 'Collaborate with your team'}</p>
+            </div>
+            ${isAdmin ? `
+              <button onclick="openModal('addTeam')" 
+                class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-colors text-sm shadow-md hover:shadow-lg">
+                ${icons.plus}
+                <span>Create Team</span>
+              </button>
+            ` : ''}
+          </div>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+            ${appData.teams.length > 0 ? appData.teams.map(team => {
+              const memberIds = team.members ? team.members.split(',') : [];
+              const members = appData.interns.filter(i => memberIds.includes(i.id));
+              
+              return `
+                <div class="bg-gradient-to-br from-white to-slate-50 rounded-2xl border-2 border-slate-200 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                  <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-6 text-white relative overflow-hidden">
+                    <div class="relative">
+                      <h3 class="text-xl font-bold mb-1">${team.teamName}</h3>
+                      <p class="text-blue-100 text-sm line-clamp-2">${team.teamDescription}</p>
+                    </div>
+                  </div>
+                  
+                  <div class="p-6">
+                    <div class="mb-4">
+                      <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Team Members (${members.length})</p>
+                      <div class="flex items-center gap-2 mb-3">
+                        ${members.slice(0, 6).map(m => `
+                          <div class="w-10 h-10 rounded-full overflow-hidden ring-2 ring-white shadow-md hover:scale-110 transition-transform" title="${m.name}">
+                            ${getAvatar(m.name, m.photoUrl)}
+                          </div>
+                        `).join('')}
+                      </div>
+                    </div>
+                    
+                    ${isAdmin ? `
+                      <div class="grid grid-cols-2 gap-2">
+                        <button onclick="openEditTeamModal('${team.id}')" class="py-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200 transition-all font-medium text-sm">Edit</button>
+                        <button onclick="confirmDeleteTeam('${team.id}')" class="py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-all font-medium text-sm">Delete</button>
+                      </div>
+                    ` : ''}
+                  </div>
+                </div>
+              `;
+            }).join('') : `
+              <div class="col-span-full bg-white rounded-xl p-12 text-center text-slate-400">
+                <p>No Teams Yet</p>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    // Tickets Page (Restored)
+    function renderTicketsPage() {
+      return `
+        <div class="p-4 md:p-8">
+          <div class="mb-6 md:mb-8">
+            <h1 class="text-xl md:text-2xl font-bold text-slate-800">Support Tickets</h1>
+            <p class="text-sm md:text-base text-slate-500">Manage intern support requests</p>
+          </div>
+          
+          <div class="space-y-4">
+            ${appData.tickets.length > 0 ? appData.tickets.map(ticket => `
+              <div class="bg-white rounded-xl p-4 md:p-6 border border-slate-200">
+                <div class="flex flex-col sm:flex-row items-start justify-between gap-3 mb-3">
+                  <div class="flex-1">
+                    <div class="flex flex-wrap items-center gap-2 md:gap-3 mb-2">
+                      <h3 class="font-bold text-slate-800 text-sm md:text-base">${ticket.message}</h3>
+                      <span class="px-2 py-1 text-xs font-medium rounded ${ticket.ticketStatus === 'open' ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'}">${ticket.ticketStatus}</span>
+                    </div>
+                    <p class="text-xs md:text-sm text-slate-500">Raised by: ${ticket.raisedByName || 'Unknown'}</p>
+                  </div>
+                  ${ticket.ticketStatus === 'open' ? `
+                    <button onclick="resolveTicket('${ticket.id}')" class="w-full sm:w-auto px-3 md:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-xs md:text-sm">Resolve</button>
+                  ` : ''}
+                </div>
+              </div>
+            `).join('') : `
+              <div class="bg-white rounded-xl p-8 md:p-12 border border-slate-200 text-center text-slate-400"><p>No tickets yet</p></div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    // Intern Space (Restored)
+    function renderInternSpacePage() {
+      const sortedMessages = [...appData.messages].sort((a, b) => {
+        const timeA = a.createdAt ? (a.createdAt.seconds || 0) : 0;
+        const timeB = b.createdAt ? (b.createdAt.seconds || 0) : 0;
+        return timeA - timeB;
+      });
+
+      return `
+        <div class="p-4 md:p-8 h-full flex flex-col">
+          <div class="mb-6">
+            <h1 class="text-xl md:text-2xl font-bold text-slate-800">Intern Space 💬</h1>
+            <p class="text-sm md:text-base text-slate-500">Share thoughts and connect with the team</p>
+          </div>
+          
+          <div class="flex-1 bg-white rounded-xl border border-slate-200 flex flex-col overflow-hidden h-[calc(100vh-200px)]">
+            <div id="messagesContainer" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-3 messages-container scrollbar-thin">
+              ${sortedMessages.length > 0 ? sortedMessages.map(msg => {
+                const isSentByMe = msg.senderId === currentUser.id;
+                return `
+                  <div class="flex ${isSentByMe ? 'justify-end' : 'justify-start'} items-end gap-2">
+                    <div class="flex flex-col ${isSentByMe ? 'items-end' : 'items-start'} max-w-[75%]">
+                      <p class="text-xs text-slate-500 mb-1 px-1">${msg.senderName}</p>
+                      <div class="message-bubble ${isSentByMe ? 'sent' : 'received'} px-4 py-2">
+                        <p class="text-sm">${msg.message}</p>
+                      </div>
+                    </div>
+                  </div>
+                `;
+              }).join('') : `
+                <div class="h-full flex items-center justify-center text-slate-400">
+                  <p>No messages yet</p>
+                </div>
+              `}
+            </div>
+            
+            <div class="border-t border-slate-200 p-4">
+              <form id="sendMessageForm" class="flex gap-2">
+                <input type="text" id="messageInput" placeholder="Type your message..." required class="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 text-sm md:text-base">
+                <button type="submit" class="px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors" id="sendMessageBtn">${icons.send}</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // My Tasks / Submit Ticket (Intern Specific)
+    function renderMyTasksPage() {
+      const myTasks = appData.tasks.filter(t => {
+          if(Array.isArray(t.assignedTo)) return t.assignedTo.includes(currentUser.id);
+          return t.assignedTo === currentUser.id || t.assignedTo === 'all';
+      });
+      return `
+        <div class="p-4 md:p-8">
+          <div class="mb-6">
+            <h1 class="text-xl font-bold text-slate-800">My Tasks</h1>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            ${myTasks.length > 0 ? myTasks.map(task => {
+              const mySubmission = appData.submissions.find(s => s.taskId === task.id && s.submittedBy === currentUser.id);
+              return `
+                <div class="bg-white rounded-xl p-4 border border-slate-200 card-hover">
+                  <h3 class="font-bold text-slate-800 mb-2">${task.title}</h3>
+                  <p class="text-sm text-slate-600 mb-4">${task.description}</p>
+                  ${!mySubmission ? `
+                    <button onclick="openSubmitTaskModal('${task.id}')" class="px-3 py-2 bg-blue-600 text-white rounded text-sm">Submit</button>
+                  ` : '<span class="text-green-600 text-sm font-medium">Submitted</span>'}
+                </div>
+              `;
+            }).join('') : '<p class="text-slate-500">No tasks assigned.</p>'}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSubmitTicketPage() {
+        return `
+            <div class="p-4 md:p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-xl font-bold text-slate-800">Support Center</h1>
+                    <button onclick="openModal('raiseTicket')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm">Raise Ticket</button>
+                </div>
+                <div class="space-y-4">
+                    ${appData.tickets.filter(t => t.raisedBy === currentUser.id).map(t => `
+                        <div class="bg-white p-4 rounded-xl border border-slate-200">
+                            <p class="font-medium">${t.message}</p>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded mt-2 inline-block">${t.ticketStatus}</span>
+                        </div>
+                    `).join('') || '<p class="text-slate-500">No tickets raised.</p>'}
+                </div>
+            </div>
+        `;
+    }
+
+    // --- Modal Renderer (UPDATED with new forms) ---
     function renderModals() {
       let html = '';
 
-      // Add Task Modal (Updated for Kanban)
-      if (modals.addTask) {
+      // 1. Add Project Modal (Dynamic)
+      if (modals.addProject) {
         html += `
           <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
-            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-              <div class="sticky top-0 bg-white flex items-center justify-between p-4 md:p-6 border-b border-slate-200">
-                <h3 class="text-base md:text-lg font-bold text-slate-800">Create New Task</h3>
-                <button onclick="closeModal('addTask')" class="text-slate-400 hover:text-slate-600">
-                  ${icons.x}
-                </button>
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+              <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-slate-800">Create New Project</h3>
+                <button onclick="closeModal('addProject')" class="text-slate-400 hover:text-slate-600">${icons.x}</button>
               </div>
-              <form id="addTaskForm" class="p-4 md:p-6 space-y-4">
+              <form id="addProjectForm" class="space-y-4">
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 mb-2">Task Title</label>
-                  <input type="text" id="taskTitle" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
+                  <label class="block text-sm font-medium text-slate-700 mb-1">Project Name</label>
+                  <input type="text" id="projectTitle" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 mb-2">Description</label>
-                  <textarea id="taskDescription" rows="3" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base"></textarea>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
+                  <textarea id="projectDescription" rows="3" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
                 </div>
-                
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Project</label>
-                    <select id="taskProject" class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
-                      ${appData.projects.map(p => `<option value="${p.id}">${p.projectTitle}</option>`).join('')}
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Sub-Branch/Tag</label>
-                    <input type="text" id="taskSubBranch" placeholder="e.g. Frontend" class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
-                  </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Priority</label>
-                    <select id="taskPriority" class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
-                      <option value="low">Low</option>
-                      <option value="medium">Medium</option>
-                      <option value="high">High</option>
-                    </select>
-                  </div>
-                  <div>
-                     <label class="block text-sm font-medium text-slate-700 mb-2">Initial Status</label>
-                     <select id="taskStatus" class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
-                       <option value="todo">To Do</option>
-                       <option value="in-progress">In Progress</option>
-                       <option value="review">Review</option>
-                     </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label class="block text-sm font-medium text-slate-700 mb-2">Assign To</label>
-                  <select id="taskAssign" class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
-                    ${appData.interns.map(i => `<option value="${i.id}">${i.name}</option>`).join('')}
-                  </select>
-                </div>
-
-                <div>
-                  <label class="block text-sm font-medium text-slate-700 mb-2">Deadline</label>
-                  <input type="date" id="taskDeadline" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
-                </div>
-
-                <div class="flex gap-3 pt-4">
-                  <button type="button" onclick="closeModal('addTask')" class="flex-1 px-4 py-3 border border-slate-200 rounded-lg hover:bg-slate-50">Cancel</button>
-                  <button type="submit" id="addTaskBtn" class="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Create Task</button>
-                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">Create Project</button>
               </form>
             </div>
           </div>
         `;
       }
 
-      // Daily Update Modal (NEW)
+      // 2. Add Task Modal (Multi-Select & Project Dynamic)
+      if (modals.addTask) {
+        html += `
+          <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
+              <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-slate-800">New Task</h3>
+                <button onclick="closeModal('addTask')" class="text-slate-400 hover:text-slate-600">${icons.x}</button>
+              </div>
+              <form id="addTaskForm" class="space-y-4">
+                <input type="text" id="taskTitle" placeholder="Task Title" required class="w-full px-4 py-2 border border-slate-300 rounded-lg font-medium text-lg focus:ring-0 border-transparent bg-slate-50 focus:bg-white placeholder-slate-400">
+                
+                <textarea id="taskDescription" rows="3" placeholder="Description..." class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm"></textarea>
+                
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Project</label>
+                    <select id="taskProject" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white">
+                      ${appData.projects.map(p => `<option value="${p.id}">${p.projectTitle}</option>`).join('')}
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Sub-Branch / Tag</label>
+                    <input type="text" id="taskSubBranch" placeholder="e.g. Frontend" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Assign To (Select Multiple)</label>
+                  <div class="max-h-32 overflow-y-auto border border-slate-300 rounded-lg p-2 space-y-1 bg-slate-50 scrollbar-thin">
+                    ${appData.interns.map(i => `
+                      <label class="flex items-center gap-2 p-2 hover:bg-white rounded cursor-pointer transition-colors">
+                        <input type="checkbox" name="assignee" value="${i.id}" class="rounded text-blue-600 focus:ring-blue-500">
+                        <div class="w-6 h-6 rounded-full overflow-hidden">${getAvatar(i.name, i.photoUrl)}</div>
+                        <span class="text-sm text-slate-700 font-medium">${i.name}</span>
+                      </label>
+                    `).join('')}
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Priority</label>
+                    <select id="taskPriority" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white">
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Due Date</label>
+                    <input type="date" id="taskDeadline" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                  </div>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 shadow-md mt-4">Create Task</button>
+              </form>
+            </div>
+          </div>
+        `;
+      }
+
+      // 3. Daily Update Modal (New)
       if (modals.dailyUpdate && selectedTaskId) {
         const task = appData.tasks.find(t => t.id === selectedTaskId);
         if(task) {
-          const updates = task.updates || []; // Array of update objects
-          
           html += `
             <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
               <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
-                <div class="p-6 border-b border-slate-200 flex justify-between items-start bg-slate-50">
-                  <div>
-                    <h3 class="text-lg font-bold text-slate-800">${task.title}</h3>
-                    <div class="flex items-center gap-2 mt-1">
-                      <span class="text-xs uppercase font-bold px-2 py-0.5 rounded bg-slate-200 text-slate-600">${task.status || 'todo'}</span>
-                      <span class="text-xs text-slate-500">Assigned to: ${appData.interns.find(i=>i.id===task.assignedTo)?.name || 'Unknown'}</span>
-                    </div>
-                  </div>
+                <div class="p-6 border-b border-slate-200 bg-slate-50 flex justify-between">
+                  <h3 class="font-bold text-slate-800 text-lg">${task.title}</h3>
                   <button onclick="closeModal('dailyUpdate')" class="text-slate-400 hover:text-slate-600">${icons.x}</button>
                 </div>
-
-                <div class="flex-1 overflow-y-auto p-6">
-                  <!-- Progress Slider -->
-                  <div class="mb-6 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                    <label class="flex justify-between text-sm font-medium text-slate-700 mb-2">
-                      <span>Completion Progress</span>
-                      <span class="text-blue-600 font-bold" id="progressVal">${task.progress || 0}%</span>
-                    </label>
-                    <input type="range" min="0" max="100" value="${task.progress || 0}" 
+                <div class="p-6 flex-1 overflow-y-auto">
+                  <div class="bg-white p-4 rounded-xl border border-slate-200 mb-6">
+                    <div class="flex justify-between text-sm font-medium text-slate-700 mb-2">
+                      <span>Progress</span> <span id="progressVal" class="text-blue-600">${task.progress||0}%</span>
+                    </div>
+                    <input type="range" id="updateProgress" min="0" max="100" value="${task.progress||0}" 
                       oninput="document.getElementById('progressVal').innerText = this.value + '%'"
-                      id="updateProgress" 
                       class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
-                    <div class="flex justify-between text-xs text-slate-400 mt-1">
-                      <span>Start</span>
-                      <span>Done</span>
-                    </div>
                   </div>
-
-                  <!-- Activity Log -->
-                  <div class="mb-6">
-                    <h4 class="font-bold text-slate-800 mb-3">Daily Activity Log</h4>
-                    <div class="space-y-3 mb-4 max-h-48 overflow-y-auto pr-2">
-                      ${updates.length > 0 ? updates.reverse().map(u => `
-                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 text-sm">
-                          <div class="flex justify-between mb-1">
-                            <span class="font-semibold text-slate-700">${u.authorName}</span>
-                            <span class="text-xs text-slate-400">${new Date(u.timestamp).toLocaleString()}</span>
-                          </div>
-                          <p class="text-slate-600">${u.text}</p>
+                  
+                  <h4 class="font-bold text-slate-800 mb-3 text-sm uppercase tracking-wide">Activity Log</h4>
+                  <div class="space-y-3 mb-4 max-h-48 overflow-y-auto pr-2 scrollbar-thin">
+                    ${(task.updates||[]).reverse().map(u => `
+                      <div class="bg-slate-50 p-3 rounded-lg text-sm border border-slate-100">
+                        <div class="flex justify-between mb-1">
+                          <span class="font-semibold text-slate-700">${u.authorName}</span>
+                          <span class="text-xs text-slate-400">${new Date(u.timestamp).toLocaleString()}</span>
                         </div>
-                      `).join('') : '<p class="text-slate-400 italic text-sm">No updates yet.</p>'}
-                    </div>
-                    
-                    <!-- Add Update Form -->
-                    <div class="relative">
-                      <textarea id="dailyUpdateText" rows="2" placeholder="What did you complete today?" 
-                        class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"></textarea>
-                    </div>
+                        <p class="text-slate-600">${u.text}</p>
+                      </div>
+                    `).join('') || '<p class="text-slate-400 italic text-sm">No activity yet.</p>'}
                   </div>
+                  <textarea id="dailyUpdateText" rows="2" placeholder="Log today's work..." class="w-full px-4 py-3 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"></textarea>
                 </div>
-
-                <div class="p-4 border-t border-slate-200 bg-white flex justify-end gap-3">
-                   ${currentUser.role === 'admin' ? `
-                     <button onclick="confirmDeleteTask('${task.id}')" class="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg text-sm font-medium">Delete Task</button>
-                   ` : ''}
-                   <button onclick="saveDailyUpdate('${task.id}')" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md font-medium">Save Progress & Update</button>
+                <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-2">
+                  ${currentUser.role === 'admin' ? `<button onclick="confirmDeleteTask('${task.id}')" class="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg text-sm font-medium">Delete</button>` : ''}
+                  <button onclick="saveDailyUpdate('${task.id}')" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">Save Update</button>
                 </div>
               </div>
             </div>
@@ -1280,48 +1849,35 @@
         }
       }
 
-      // Add Project Modal (unchanged but ensured to exist)
-      if (modals.addProject) {
-        html += `
-          <div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
-            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
-              <div class="flex items-center justify-between p-4 md:p-6 border-b border-slate-200">
-                <h3 class="text-base md:text-lg font-bold text-slate-800">Add Project</h3>
-                <button onclick="closeModal('addProject')" class="text-slate-400 hover:text-slate-600">
-                  ${icons.x}
-                </button>
-              </div>
-              <form id="addProjectForm" class="p-4 md:p-6 space-y-4">
-                <div>
-                  <label class="block text-sm font-medium text-slate-700 mb-2">Project Title</label>
-                  <input type="text" id="projectTitle" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-slate-700 mb-2">Description</label>
-                  <textarea id="projectDescription" rows="3" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base"></textarea>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-slate-700 mb-2">Technologies</label>
-                  <input type="text" id="projectTech" placeholder="React, Node.js" class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 text-base">
-                </div>
-                <div class="flex gap-3 pt-4">
-                  <button type="button" onclick="closeModal('addProject')" class="flex-1 px-4 py-3 border border-slate-200 rounded-lg hover:bg-slate-50">Cancel</button>
-                  <button type="submit" id="addProjectBtn" class="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Add</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        `;
+      // Existing Modals (Restored)
+      if (modals.addIntern) {
+        html += `<div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6"><div class="flex justify-between mb-6"><h3 class="text-xl font-bold text-slate-800">Add Intern</h3><button onclick="closeModal('addIntern')">${icons.x}</button></div><form id="addInternForm" class="space-y-4"><input type="text" id="internName" placeholder="Full Name" required class="w-full px-4 py-2 border rounded-lg"><input type="email" id="internEmail" placeholder="Email" required class="w-full px-4 py-2 border rounded-lg"><input type="password" id="internPassword" placeholder="Password" required class="w-full px-4 py-2 border rounded-lg"><input type="text" id="internRole" placeholder="Role" required class="w-full px-4 py-2 border rounded-lg"><input type="url" id="internPhoto" placeholder="Photo URL" class="w-full px-4 py-2 border rounded-lg"><button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg">Add</button></form></div></div>`;
       }
       
-      // ... (Include other modals like Add Intern, Attendance as they were)
-      // I am keeping the logic generic for the other existing modals to save space
-      // You can paste the previous modal code here if needed, but the key new ones are above.
+      if (modals.editIntern && editingIntern) {
+        html += `<div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6"><div class="flex justify-between mb-6"><h3 class="text-xl font-bold">Edit Intern</h3><button onclick="closeModal('editIntern')">${icons.x}</button></div><form id="editInternForm" class="space-y-4"><input type="text" id="editInternName" value="${editingIntern.name}" class="w-full px-4 py-2 border rounded-lg"><input type="email" id="editInternEmail" value="${editingIntern.email}" class="w-full px-4 py-2 border rounded-lg"><input type="text" id="editInternRole" value="${editingIntern.role}" class="w-full px-4 py-2 border rounded-lg"><button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg">Save</button></form></div></div>`;
+      }
+
+      if (modals.raiseTicket) {
+        html += `<div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6"><h3 class="text-lg font-bold mb-4">Raise Ticket</h3><form id="raiseTicketForm"><textarea id="ticketMessage" rows="4" class="w-full border rounded-lg p-2 mb-4" placeholder="Describe issue..."></textarea><button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg">Submit</button><button type="button" onclick="closeModal('raiseTicket')" class="w-full mt-2 border py-2 rounded-lg">Cancel</button></form></div></div>`;
+      }
+
+      if (modals.submitTask) {
+        html += `<div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6"><h3 class="text-lg font-bold mb-4">Submit Task</h3><form id="submitTaskForm"><textarea id="submissionText" rows="4" class="w-full border rounded-lg p-2 mb-4" placeholder="Submission details..."></textarea><button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg">Submit</button><button type="button" onclick="closeModal('submitTask')" class="w-full mt-2 border py-2 rounded-lg">Cancel</button></form></div></div>`;
+      }
+
+      // Add Attendance Modal (Simplified for brevity but functional)
+      if (modals.attendance) {
+        const intern = appData.interns.find(i => i.id === selectedInternId);
+        if(intern) {
+            html += `<div class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6"><div class="flex justify-between mb-4"><h3 class="font-bold">Attendance for ${intern.name}</h3><button onclick="closeModal('attendance')">${icons.x}</button></div><div class="grid grid-cols-7 gap-2 mb-4">${Array.from({length: 30}, (_, i) => `<div class="p-2 border rounded text-center cursor-pointer hover:bg-slate-50" onclick="toggleAttendance('${new Date().getFullYear()}-${new Date().getMonth()+1}-${i+1}')">${i+1}</div>`).join('')}</div><p class="text-sm text-slate-500">Click a day to toggle status (Present -> WFH -> Absent)</p></div></div>`;
+        }
+      }
 
       return html;
     }
 
-    // Main render
+    // --- Main Render Logic ---
     function render() {
       const app = document.getElementById('app');
       
@@ -1335,29 +1891,34 @@
         if (isAdmin) {
           switch (currentPage) {
             case 'dashboard': content = renderAdminDashboard(); break;
-            case 'kanban': content = renderKanbanPage(); break; // New
-            case 'interns': content = renderInternsPage(); break; // Assuming generic function exists or reused from prev code
-            // ... map other pages
-            default: content = currentPage === 'kanban' ? renderKanbanPage() : renderAdminDashboard();
+            case 'kanban': content = renderKanbanPage(); break;
+            case 'interns': content = renderInternsPage(); break;
+            case 'tasks': content = renderTasksPage(); break;
+            case 'projects': content = renderProjectsPage(); break;
+            case 'teams': content = renderTeamsPage(); break;
+            case 'attendance': content = renderAttendancePage(); break;
+            case 'tickets': content = renderTicketsPage(); break;
+            case 'intern-space': content = renderInternSpacePage(); break;
+            default: content = renderAdminDashboard();
           }
         } else {
           switch (currentPage) {
-            case 'dashboard': content = renderInternDashboard(); break; // Assuming generic function
-            case 'kanban': content = renderKanbanPage(); break; // New
-            // ... map other pages
-            default: content = currentPage === 'kanban' ? renderKanbanPage() : renderInternDashboard();
+            case 'dashboard': content = renderInternDashboard(); break;
+            case 'kanban': content = renderKanbanPage(); break;
+            case 'my-tasks': content = renderMyTasksPage(); break;
+            case 'my-projects': content = renderProjectsPage(); break;
+            case 'my-team': content = renderTeamsPage(); break;
+            case 'submit-ticket': content = renderSubmitTicketPage(); break;
+            case 'intern-space': content = renderInternSpacePage(); break;
+            default: content = renderInternDashboard();
           }
         }
-        
-        // Fallback for pages not explicitly defined in this snippet but present in original
-        // This ensures the sidebar navigation works even if I didn't paste every single page function 
-        // in this specific response block (assuming you merge them).
         
         app.innerHTML = `
           <div class="h-full w-full flex relative">
             <div class="mobile-overlay" onclick="closeSidebar()"></div>
             ${renderSidebar()}
-            <main class="flex-1 overflow-y-auto bg-slate-50 scrollbar-thin w-full">
+            <main class="flex-1 overflow-y-auto bg-slate-50 scrollbar-thin w-full transition-colors duration-300">
               ${renderMobileHeader()}
               ${content}
             </main>
@@ -1366,179 +1927,220 @@
         `;
         
         attachFormHandlers();
+        
+        // Auto scroll messages
+        if(currentPage === 'intern-space') setTimeout(()=> {
+            const el = document.getElementById('messagesContainer');
+            if(el) el.scrollTop = el.scrollHeight;
+        }, 100);
       }
     }
 
-    // Handlers
+    // --- Handlers & Helpers ---
     function attachLoginHandler() {
       const form = document.getElementById('loginForm');
       if (form) {
-        form.addEventListener('submit', async (e) => {
+        form.addEventListener('submit', (e) => {
           e.preventDefault();
           const email = document.getElementById('loginEmail').value.trim();
-          const password = document.getElementById('loginPassword').value.trim();
-          const errorEl = document.getElementById('loginError');
-          
-          if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+          const pass = document.getElementById('loginPassword').value.trim();
+          if(email === ADMIN_EMAIL && pass === ADMIN_PASSWORD) {
             currentUser = { id: 'admin', name: 'Admin', email: ADMIN_EMAIL, role: 'admin' };
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            currentPage = 'dashboard';
-            render();
-            return;
+          } else {
+            const intern = appData.interns.find(i => i.email === email && i.password === pass);
+            if(intern) currentUser = intern;
+            else { document.getElementById('loginError').classList.remove('hidden'); document.getElementById('loginError').innerText = 'Invalid credentials'; return; }
           }
-          
-          const intern = appData.interns.find(i => i.email === email && i.password === password);
-          if (intern) {
-            currentUser = { id: intern.id, name: intern.name, email: intern.email, role: intern.role, photoUrl: intern.photoUrl };
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            currentPage = 'dashboard';
-            render();
-            return;
-          }
-          
-          errorEl.textContent = 'Invalid email or password';
-          errorEl.classList.remove('hidden');
+          localStorage.setItem('currentUser', JSON.stringify(currentUser));
+          render();
         });
       }
     }
 
     function attachFormHandlers() {
-        // Add Task Handler (Updated)
-        const addTaskForm = document.getElementById('addTaskForm');
-        if (addTaskForm) {
-            addTaskForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btn = document.getElementById('addTaskBtn');
-                btn.disabled = true;
-                btn.textContent = 'Creating...';
-                
-                const task = {
-                    type: 'task',
-                    id: generateId(),
-                    title: document.getElementById('taskTitle').value,
-                    description: document.getElementById('taskDescription').value,
-                    deadline: document.getElementById('taskDeadline').value,
-                    priority: document.getElementById('taskPriority').value,
-                    assignedTo: document.getElementById('taskAssign').value,
-                    projectId: document.getElementById('taskProject').value,
-                    subBranch: document.getElementById('taskSubBranch').value,
-                    status: document.getElementById('taskStatus').value || 'todo',
-                    progress: 0,
-                    updates: [] // Array for daily logs
-                };
-                
-                const result = await createFirestoreDoc(task);
-                if (result.success) {
-                    closeModal('addTask');
-                } else {
-                    btn.disabled = false;
-                    btn.textContent = 'Create Task';
-                }
-            });
-        }
-        
-        // Add Project Handler
-        const addProjectForm = document.getElementById('addProjectForm');
-        if (addProjectForm) {
-            addProjectForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btn = document.getElementById('addProjectBtn');
-                btn.disabled = true;
-                
-                const project = {
-                    type: 'project',
-                    id: generateId(),
-                    projectTitle: document.getElementById('projectTitle').value,
-                    projectDescription: document.getElementById('projectDescription').value,
-                    technologies: document.getElementById('projectTech').value,
-                    projectStatus: 'planning',
-                    startDate: new Date().toISOString().split('T')[0]
-                };
-                
-                const result = await createFirestoreDoc(project);
-                if(result.success) closeModal('addProject');
-            });
-        }
+      // Add Project
+      const pForm = document.getElementById('addProjectForm');
+      if(pForm) {
+        pForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          await createFirestoreDoc({
+            type: 'project', id: generateId(),
+            projectTitle: document.getElementById('projectTitle').value,
+            projectDescription: document.getElementById('projectDescription').value,
+            projectStatus: 'planning'
+          });
+          closeModal('addProject');
+        });
+      }
+
+      // Add Task
+      const tForm = document.getElementById('addTaskForm');
+      if(tForm) {
+        tForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const checkedBoxes = document.querySelectorAll('input[name="assignee"]:checked');
+          const assignees = Array.from(checkedBoxes).map(cb => cb.value);
+          await createFirestoreDoc({
+            type: 'task', id: generateId(),
+            title: document.getElementById('taskTitle').value,
+            description: document.getElementById('taskDescription').value,
+            projectId: document.getElementById('taskProject').value,
+            subBranch: document.getElementById('taskSubBranch').value,
+            priority: document.getElementById('taskPriority').value,
+            deadline: document.getElementById('taskDeadline').value,
+            assignedTo: assignees.length > 0 ? assignees : 'unassigned',
+            status: 'todo', progress: 0, updates: []
+          });
+          closeModal('addTask');
+        });
+      }
+
+      // Add Intern
+      const iForm = document.getElementById('addInternForm');
+      if(iForm) {
+        iForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          await createFirestoreDoc({
+            type: 'intern', id: generateId(),
+            name: document.getElementById('internName').value,
+            email: document.getElementById('internEmail').value,
+            password: document.getElementById('internPassword').value,
+            role: document.getElementById('internRole').value,
+            photoUrl: document.getElementById('internPhoto').value,
+            status: 'active'
+          });
+          closeModal('addIntern');
+        });
+      }
+      
+      // Edit Intern
+      const eiForm = document.getElementById('editInternForm');
+      if(eiForm) {
+          eiForm.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              editingIntern.name = document.getElementById('editInternName').value;
+              editingIntern.email = document.getElementById('editInternEmail').value;
+              editingIntern.role = document.getElementById('editInternRole').value;
+              await updateFirestoreDoc(editingIntern);
+              closeModal('editIntern');
+          });
+      }
+
+      // Raise Ticket
+      const rtForm = document.getElementById('raiseTicketForm');
+      if(rtForm) {
+          rtForm.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              await createFirestoreDoc({
+                  type: 'ticket', id: generateId(),
+                  message: document.getElementById('ticketMessage').value,
+                  priority: 'low', raisedBy: currentUser.id, raisedByName: currentUser.name, ticketStatus: 'open'
+              });
+              closeModal('raiseTicket');
+          });
+      }
+      
+      // Submit Task
+      const stForm = document.getElementById('submitTaskForm');
+      if(stForm) {
+          stForm.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              await createFirestoreDoc({
+                  type: 'submission', id: generateId(),
+                  taskId: selectedInternId, submittedBy: currentUser.id,
+                  submissionText: document.getElementById('submissionText').value,
+                  submissionStatus: 'pending'
+              });
+              closeModal('submitTask');
+          });
+      }
+      
+      // Chat
+      const smForm = document.getElementById('sendMessageForm');
+      if(smForm) {
+          smForm.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const input = document.getElementById('messageInput');
+              if(!input.value.trim()) return;
+              await createFirestoreDoc({
+                  type: 'message', id: generateId(),
+                  message: input.value, senderId: currentUser.id, senderName: currentUser.name
+              });
+              input.value = '';
+          });
+      }
     }
 
-    // Save Daily Update Logic
-    window.saveDailyUpdate = async function(taskId) {
+    // --- Global Actions ---
+    window.openModal = (m) => { modals[m] = true; render(); };
+    window.closeModal = (m) => { modals[m] = false; selectedTaskId = null; selectedInternId = null; render(); };
+    window.navigateTo = (p) => { currentPage = p; localStorage.setItem('currentPage', p); closeSidebar(); render(); };
+    window.logout = () => { currentUser = null; localStorage.removeItem('currentUser'); render(); };
+    window.toggleSidebar = () => { sidebarOpen = !sidebarOpen; render(); };
+    window.closeSidebar = () => { sidebarOpen = false; render(); };
+    window.toggleDarkMode = () => { darkMode = !darkMode; localStorage.setItem('darkMode', darkMode); document.body.classList.toggle('dark-mode', darkMode); render(); };
+    
+    // Star Intern Actions
+    window.setStarIntern = async (id) => {
+        const old = getStarIntern();
+        if(old) await updateFirestoreDoc({...old, isStarIntern: false});
+        const n = appData.interns.find(i => i.id === id);
+        if(n) { await updateFirestoreDoc({...n, isStarIntern: true}); triggerConfetti(); }
+    };
+    window.removeStarIntern = async (id) => {
+        const n = appData.interns.find(i => i.id === id);
+        if(n) await updateFirestoreDoc({...n, isStarIntern: false});
+    };
+    
+    // Deletions
+    window.confirmDeleteIntern = async (id) => { if(confirm('Delete intern?')) { const i = appData.interns.find(x=>x.id===id); await deleteFirestoreDoc(i); } };
+    window.confirmDeleteTask = async (id) => { if(confirm('Delete task?')) { const t = appData.tasks.find(x=>x.id===id); await deleteFirestoreDoc(t); closeModal('dailyUpdate'); } };
+    window.confirmDeleteTeam = async (id) => { if(confirm('Delete team?')) { const t = appData.teams.find(x=>x.id===id); await deleteFirestoreDoc(t); } };
+    
+    // Edit Triggers
+    window.openEditInternModal = (id) => { editingIntern = appData.interns.find(i => i.id === id); modals.editIntern = true; render(); };
+    window.openAttendanceModal = (id) => { selectedInternId = id; modals.attendance = true; render(); };
+    window.openSubmitTaskModal = (id) => { selectedInternId = id; modals.submitTask = true; render(); };
+    window.resolveTicket = async (id) => { const t = appData.tickets.find(x=>x.id===id); await updateFirestoreDoc({...t, ticketStatus: 'resolved'}); };
+    
+    // Kanban Logic
+    window.filterKanbanProject = (pid) => { selectedKanbanProject = pid; render(); };
+    window.handleDragStart = (e, id) => e.dataTransfer.setData('text', id);
+    window.handleDragOver = (e) => e.preventDefault();
+    window.handleDrop = async (e, status) => {
+        e.preventDefault();
+        const id = e.dataTransfer.getData('text');
+        const task = appData.tasks.find(t => t.id === id);
+        if(task && task.status !== status) await updateFirestoreDoc({__firestoreId: task.__firestoreId, status});
+    };
+    window.openDailyUpdateModal = (tid) => { selectedTaskId = tid; modals.dailyUpdate = true; render(); };
+    window.saveDailyUpdate = async (tid) => {
         const progress = document.getElementById('updateProgress').value;
         const note = document.getElementById('dailyUpdateText').value;
-        
-        const task = appData.tasks.find(t => t.id === taskId);
-        if(!task) return;
-
-        // Clone updates array or init new
-        const updates = task.updates ? [...task.updates] : [];
-        
-        if (note.trim()) {
-            updates.push({
-                text: note,
-                timestamp: new Date().toISOString(),
-                authorId: currentUser.id,
-                authorName: currentUser.name
-            });
-        }
-
-        task.progress = parseInt(progress);
-        task.updates = updates;
-        
-        // If progress is 100, move to completed
-        if(task.progress === 100) task.status = 'completed';
-
-        await updateFirestoreDoc(task);
+        const task = appData.tasks.find(t => t.id === tid);
+        const updates = [...(task.updates || [])];
+        if(note.trim()) updates.push({text: note, timestamp: new Date().toISOString(), authorName: currentUser.name});
+        const status = parseInt(progress) === 100 ? 'completed' : (task.status === 'todo' && parseInt(progress) > 0 ? 'in-progress' : task.status);
+        await updateFirestoreDoc({__firestoreId: task.__firestoreId, progress: parseInt(progress), updates, status});
         closeModal('dailyUpdate');
     };
-
-    window.confirmDeleteTask = async function(taskId) {
-        if(confirm('Are you sure you want to delete this task?')) {
-            const task = appData.tasks.find(t => t.id === taskId);
-            if(task) await deleteFirestoreDoc(task);
-            closeModal('dailyUpdate');
+    
+    // Attendance Toggle (Simplified for this merged version)
+    window.toggleAttendance = async (dateStr) => {
+        // Just dummy log for this simplified handler in merged version
+        console.log('Toggled attendance for', dateStr); 
+        // In full version, this would check/create attendance record
+        // Adding simplified Firestore write for demonstration:
+        const existing = appData.attendance.find(a => a.internId === selectedInternId && a.date === dateStr);
+        if(existing) {
+            const nextStatus = existing.status === 'present' ? 'wfh' : existing.status === 'wfh' ? 'absent' : 'present';
+            await updateFirestoreDoc({__firestoreId: existing.__firestoreId, status: nextStatus});
+        } else {
+            await createFirestoreDoc({type: 'attendance', internId: selectedInternId, date: dateStr, status: 'present'});
         }
-    }
-
-    // Standard Modal Logic
-    window.openModal = function(modal) {
-      modals[modal] = true;
-      render();
     };
 
-    window.closeModal = function(modal) {
-      modals[modal] = false;
-      selectedInternId = null;
-      selectedTaskId = null;
-      render();
-    };
-
-    window.navigateTo = function(page) {
-      currentPage = page;
-      localStorage.setItem('currentPage', page);
-      closeSidebar();
-      render();
-    };
-
-    window.logout = function() {
-      if (unsubscribeFirestore) {
-        unsubscribeFirestore();
-      }
-      currentUser = null;
-      currentPage = 'dashboard';
-      localStorage.removeItem('currentUser');
-      localStorage.removeItem('currentPage');
-      render();
-    };
-
-    // Placeholder Render Functions (If you need to view other pages, fill these from your original code)
-    // For brevity, I'm providing simple fallbacks if they weren't in the snippet provided
-    function renderInternsPage() { return `<div class="p-8"><h2>Interns Page (Refer to original code)</h2></div>`; }
-    function renderInternDashboard() { 
-        // Simple fallback using the kanban logic or admin logic for demo
-        return renderAdminDashboard().replace('Admin', currentUser.name); 
-    }
-
-    // Initialize
+    // Init
     initApp();
   </script>
 </body>
